@@ -16,7 +16,7 @@ header_info = {
     'Connection': 'keep-alive',
     'Upgrade-Insecure-Requests': '1',
     'Content-Length': '103',
-    'Cookie': settings.COOKIE,
+    'Cookie': settings.COOKIE_JW,
 }
 
 
