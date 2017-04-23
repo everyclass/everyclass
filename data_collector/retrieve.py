@@ -5,7 +5,7 @@ import json
 import settings
 
 header_info = {
-    "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8',
+    "User-Agent": settings.USER_AGENT,
     "Referer": "http://csujwc.its.csu.edu.cn/jiaowu/pkgl/llsykb/llsykb_find_xs0101.jsp?xnxq01id=2016-2017-2&init=1&isview=0",
     'Host': 'csujwc.its.csu.edu.cn',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -27,7 +27,7 @@ def retrieve_classtable():
     data = {
         'type': 'xs0101',
         'isview': '0',
-        'xnxq01id': settings.GLOBAL_xnxq01id,
+        'xnxq01id': settings.GLOBAL_semester,
         'xs0101id': 'xs0101id',
         'xs': u'xs',
         'sfFD': '1'

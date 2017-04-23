@@ -1,3 +1,5 @@
+# This module processes data from raw_data directory and save them to database
+# Created Mar. 26, 2017 by Frederic
 import os
 from bs4 import BeautifulSoup
 import hashlib
@@ -5,6 +7,7 @@ import json
 import mysql.connector
 import settings
 from predefined import get_row_code
+from predefined import get_semester_code_for_db
 
 
 def process_data(xq):
@@ -13,7 +16,7 @@ def process_data(xq):
     students_set = set([])
     names_json = open("stu_data.json")
     names = json.load(names_json)
-    conn = mysql.connector.connect(**settings.mysql_config)
+    conn = mysql.connector.connect(**settings.MYSQL_CONFIG)
     cursor = conn.cursor()
     for stu in names:
         print('Processing student: [%s]%s(id=%s)' % (stu['xh'], stu['xm'], stu['xs0101id']))
@@ -23,7 +26,7 @@ def process_data(xq):
         query = 'select * from ec_students_%s where xh=%s'
         if settings.DEBUG:
             print(query)
-        cursor.execute(query, (settings.get_semester_code(xq), stu['xh']))
+        cursor.execute(query, (get_semester_code_for_db(xq), stu['xh']))
         if not cursor.fetchall():
             print('[ADD STUDENT]')
             for class_time in range(1, 8):
@@ -50,7 +53,7 @@ def process_data(xq):
                         query = "select * from ec_classes_%s where id=%s"
                         if settings.DEBUG:
                             print(query)
-                        cursor.execute(query, (settings.get_semester_code(xq), md5.hexdigest()))
+                        cursor.execute(query, (get_semester_code_for_db(xq), md5.hexdigest()))
                         class_fetch_result = cursor.fetchall()
                         if not class_fetch_result:
                             print('[ADD CLASS]', end='')
@@ -60,7 +63,7 @@ def process_data(xq):
                             if settings.DEBUG:
                                 print(query)
                             cursor.execute(query, (
-                                settings.get_semester_code(xq), str(class_info['clsname']), class_time, row_number,
+                                get_semester_code_for_db(xq), str(class_info['clsname']), class_time, row_number,
                                 str(class_info['teacher']),
                                 str(class_info['duration']), str(class_info['week']), str(class_info['location']),
                                 json.dumps(students_set),
@@ -77,7 +80,7 @@ def process_data(xq):
                                 if settings.DEBUG:
                                     print(query)
                                 cursor.execute(query, (
-                                    settings.get_semester_code(xq), json.dumps(students_set), md5.hexdigest()))
+                                    get_semester_code_for_db(xq), json.dumps(students_set), md5.hexdigest()))
                         del md5
                         print(class_info)
                         class_info.clear()
@@ -87,7 +90,7 @@ def process_data(xq):
             class_list.clear()
             if settings.DEBUG: print(query)
             cursor.execute(query, (
-                settings.get_semester_code(xq), stu['xs0101id'], stu['xm'], stu['xh'], json.dumps(class_list)))
+                get_semester_code_for_db(xq), stu['xs0101id'], stu['xm'], stu['xh'], json.dumps(class_list)))
             conn.commit()
         else:
             print('[PASS] STUDENT ALREADY EXISTS')
