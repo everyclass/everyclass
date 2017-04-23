@@ -43,7 +43,7 @@ EveryClass 是由就读于中南大学的 Frederic 主持创建的一个 Python 
 - 修改 sql/everyclass.sql 内的学期信息，然后将其拷贝到data_collector目录中，运行predefined.py，按照提示导入数据库
 
 ##### 学生信息采集
-- 通过各种手段取得包含学生基本信息的stu_data.json，保存在data_collector目录下
+- 通过各种手段取得包含学生基本信息的stu_data.json，保存在data_collector目录下（格式参见stu_data_sample.json，出于对本校学生信息的保护，恕不直接提供stu_data.json文件）
 
 ##### 教务数据获取和处理
 - 手动通过浏览器操作进入教务的课表查询页面，然后抓包获得 cookies，修改settings.py里的COOKIE_JW字段
