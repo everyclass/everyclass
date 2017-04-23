@@ -8,6 +8,8 @@ import mysql.connector
 import settings
 from predefined import get_row_code
 from predefined import get_semester_code_for_db
+import predefined
+from termcolor import cprint
 
 
 def process_data(xq):
@@ -19,16 +21,16 @@ def process_data(xq):
     conn = mysql.connector.connect(**settings.MYSQL_CONFIG)
     cursor = conn.cursor()
     for stu in names:
-        print('Processing student: [%s]%s(id=%s)' % (stu['xh'], stu['xm'], stu['xs0101id']))
+        cprint('Processing student: [%s]%s(id=%s)' % (stu['xh'], stu['xm'], stu['xs0101id']), attrs=["bold"])
         file_addr = os.path.join('raw_data', stu['xs0101id'])
         file = open(file_addr + '.html', 'r')
         soup = BeautifulSoup(file, 'html.parser')
-        query = 'select * from ec_students_%s where xh=%s'
+        query = 'select * from ec_students_' + get_semester_code_for_db(xq) + ' where xh=%s'
         if settings.DEBUG:
-            print(query)
-        cursor.execute(query, (get_semester_code_for_db(xq), stu['xh']))
+            predefined.print_formatted_info(query)
+        cursor.execute(query, (stu['xh'],))
         if not cursor.fetchall():
-            print('[ADD STUDENT]')
+            cprint('[ADD STUDENT]', attrs=['bold'])
             for class_time in range(1, 8):
                 for row_number in range(1, 7):
                     query_selector = 'div[id="' + get_row_code(row_number) + '-' + str(
@@ -50,55 +52,59 @@ def process_data(xq):
                         md5.update(class_str.encode('utf-8'))
                         class_info['hash'] = md5.hexdigest()
                         class_list.append(md5.hexdigest())
-                        query = "select * from ec_classes_%s where id=%s"
+                        query = "select * from ec_classes_" + get_semester_code_for_db(xq) + " where id=%s"
                         if settings.DEBUG:
-                            print(query)
-                        cursor.execute(query, (get_semester_code_for_db(xq), md5.hexdigest()))
+                            predefined.print_formatted_info(query)
+                        cursor.execute(query, (md5.hexdigest(),))
                         class_fetch_result = cursor.fetchall()
                         if not class_fetch_result:
-                            print('[ADD CLASS]', end='')
+                            cprint('[ADD CLASS]', end='', color="blue", attrs=['bold'])
                             students_set.clear()
                             students_set.add(stu['xh'])
-                            query = "insert into ec_classes_%s (clsname, day, time, teacher, duration, week, location, students, id) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                            query = "insert into ec_classes_" + get_semester_code_for_db(
+                                xq) + " (clsname, day, time, teacher, duration, week, location, students, id) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                             if settings.DEBUG:
-                                print(query)
+                                predefined.print_formatted_info(query)
                             cursor.execute(query, (
-                                get_semester_code_for_db(xq), str(class_info['clsname']), class_time, row_number,
+                                str(class_info['clsname']), class_time, row_number,
                                 str(class_info['teacher']),
                                 str(class_info['duration']), str(class_info['week']), str(class_info['location']),
                                 json.dumps(students_set),
                                 md5.hexdigest()))
                         else:
-                            print('[APPEND STUDENT]', end='')
+                            cprint('[APPEND STUDENT]', end='', color='blue', attrs=['bold'])
                             students_set.clear()
                             students_set = json.loads(class_fetch_result[0][7])
                             # For unknown reason, education management system in CSU may show your same classes twice,
                             # hence you need to check whether this happens
                             if stu['xh'] not in students_set:
                                 students_set.add(stu['xh'])
-                                query = "update ec_classes_%s set students=%s where id=%s"
+                                query = "update ec_classes_" + get_semester_code_for_db(
+                                    xq) + " set students=%s where id=%s"
                                 if settings.DEBUG:
-                                    print(query)
-                                cursor.execute(query, (
-                                    get_semester_code_for_db(xq), json.dumps(students_set), md5.hexdigest()))
+                                    predefined.print_formatted_info(query)
+                                cursor.execute(query, (json.dumps(students_set), md5.hexdigest()))
                         del md5
                         print(class_info)
                         class_info.clear()
-            query = "insert into ec_students_%s (xs0101id, name, xh, classes) values (%s, %s, %s, %s)"
+            query = "insert into ec_students_" + get_semester_code_for_db(
+                xq) + " (xs0101id, name, xh, classes) values (%s, %s, %s, %s)"
             if settings.DEBUG:
                 print('Classlist(%s): %s' % (len(class_list), class_list))
             class_list.clear()
-            if settings.DEBUG: print(query)
-            cursor.execute(query, (
-                get_semester_code_for_db(xq), stu['xs0101id'], stu['xm'], stu['xh'], json.dumps(class_list)))
+            if settings.DEBUG:
+                predefined.print_formatted_info(query)
+            cursor.execute(query, (stu['xs0101id'], stu['xm'], stu['xh'], json.dumps(class_list)))
             conn.commit()
         else:
-            print('[PASS] STUDENT ALREADY EXISTS')
+            cprint('[PASS] STUDENT ALREADY EXISTS', color='green', attrs=['bold'])
         print('\n')
     cursor.close()
     conn.close()
 
 
 if __name__ == '__main__':
-    xq = input('Input a semester(2016-2017-2 by default):')
-    process_data(xq)
+    semester = input('Input a semester(2016-2017-2 by default):')
+    if not semester:
+        semester = settings.GLOBAL_semester
+    process_data(semester)
