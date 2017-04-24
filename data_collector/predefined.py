@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file contains predefined information which needs to be imported by other modules
 # Created Apr. 19, 2017 by Frederic
-from termcolor import colored, cprint
+from termcolor import cprint
 
 
 # Function: get_row_code
@@ -89,7 +89,7 @@ def get_faculty_name(code):
         return '资源与安全工程学院'
     elif code == '03':
         return '资源加工与生物工程学院'
-    elif code == '04':# Not sure
+    elif code == '04':  # Not sure
         return '地球科学与信息物理学院'
     elif code == '05':
         return '冶金与环境学院'
@@ -151,7 +151,7 @@ def get_faculty_name(code):
         return '体育教研部'
     elif code == '93':
         return '国际合作与交流处'
-    else: # international students and so on
+    else:  # international students and so on
         return '其他'
 
 
@@ -164,7 +164,7 @@ def get_faculty_name(code):
 #    Will show "---DEBUG---" flags
 def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
     if show_debug_tip:
-        cprint("-----" + info_about + "-----", "blue",attrs=['bold'])
+        cprint("-----" + info_about + "-----", "blue", attrs=['bold'])
     if isinstance(info, dict):
         for (k, v) in info.items():
             print("%s =" % k, v)
@@ -174,7 +174,7 @@ def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
         for each_info in info:
             print(each_info)
     if show_debug_tip:
-        cprint("----" + info_about + " ENDS----", "blue",attrs=['bold'])
+        cprint("----" + info_about + " ENDS----", "blue", attrs=['bold'])
 
 
 # Function: create_tables
@@ -195,8 +195,8 @@ def create_tables():
 
 # Function: input_accepted
 # Used to check if input is accepted when predefined.py is executed
-def input_accepted(order):
-    if order == "1":
+def input_accepted(__order):
+    if __order == "1":
         print("This function will execute SQL sentences in 'everyclass.sql'\n"
               "If you want to create table for a new semester you need to edit semester code in 'everyclass.sql' first.")
         cprint("Input Y if you want to create table for a semester", attrs=["bold"])

@@ -73,7 +73,8 @@ def stu_id_prefix():
                     if re_profess_compiled.split(each_people[4])[0] not in fetch_result[0][0]:
                         query = "UPDATE ec_stu_id_prefix SET name=%s WHERE prefix=%s"
                         cursor.execute(query, (
-                        fetch_result[0][0] + ';' + re_profess_compiled.split(each_people[4])[0], each_people[6][0:4]))
+                            fetch_result[0][0] + ';' + re_profess_compiled.split(each_people[4])[0],
+                            each_people[6][0:4]))
                         conn.commit()
 
             print("\n")

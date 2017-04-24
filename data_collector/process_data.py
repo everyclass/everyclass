@@ -25,7 +25,7 @@ def process_data(xq):
         file_addr = os.path.join('raw_data', stu['xs0101id'])
         file = open(file_addr + '.html', 'r')
         soup = BeautifulSoup(file, 'html.parser')
-        query = 'select * from ec_students_' + get_semester_code_for_db(xq) + ' where xh=%s'
+        query = 'SELECT * FROM ec_students_' + get_semester_code_for_db(xq) + ' WHERE xh=%s'
         if settings.DEBUG:
             predefined.print_formatted_info(query)
         cursor.execute(query, (stu['xh'],))
@@ -52,7 +52,7 @@ def process_data(xq):
                         md5.update(class_str.encode('utf-8'))
                         class_info['hash'] = md5.hexdigest()
                         class_list.append(md5.hexdigest())
-                        query = "select * from ec_classes_" + get_semester_code_for_db(xq) + " where id=%s"
+                        query = "SELECT * FROM ec_classes_" + get_semester_code_for_db(xq) + " WHERE id=%s"
                         if settings.DEBUG:
                             predefined.print_formatted_info(query)
                         cursor.execute(query, (md5.hexdigest(),))
@@ -61,8 +61,9 @@ def process_data(xq):
                             cprint('[ADD CLASS]', end='', color="blue", attrs=['bold'])
                             students_list.clear()
                             students_list.add(stu['xh'])
-                            query = "insert into ec_classes_" + get_semester_code_for_db(
-                                xq) + " (clsname, day, time, teacher, duration, week, location, students, id) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                            query = "INSERT INTO ec_classes_" + get_semester_code_for_db(
+                                xq) + "(clsname, day, time, teacher, duration, week, location, students, id) VALUES (" \
+                                      "%s, %s, %s, %s, %s, %s, %s, %s, %s) "
                             if settings.DEBUG:
                                 predefined.print_formatted_info(query)
                             cursor.execute(query, (
@@ -87,8 +88,8 @@ def process_data(xq):
                         del md5
                         print(class_info)
                         class_info.clear()
-            query = "insert into ec_students_" + get_semester_code_for_db(
-                xq) + " (xs0101id, name, xh, classes) values (%s, %s, %s, %s)"
+            query = "INSERT INTO ec_students_" + get_semester_code_for_db(
+                xq) + " (xs0101id, name, xh, classes) VALUES (%s, %s, %s, %s)"
             if settings.DEBUG:
                 print('Classlist(%s): %s' % (len(class_list), class_list))
             class_list.clear()
