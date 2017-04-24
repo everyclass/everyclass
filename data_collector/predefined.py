@@ -164,7 +164,7 @@ def get_faculty_name(code):
 #    Will show "---DEBUG---" flags
 def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
     if show_debug_tip:
-        cprint("-----" + info_about + "-----", "blue")
+        cprint("-----" + info_about + "-----", "blue",attrs=['bold'])
     if isinstance(info, dict):
         for (k, v) in info.items():
             print("%s =" % k, v)
@@ -174,7 +174,7 @@ def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
         for each_info in info:
             print(each_info)
     if show_debug_tip:
-        cprint("----" + info_about + " ENDS----", "blue")
+        cprint("----" + info_about + " ENDS----", "blue",attrs=['bold'])
 
 
 # Function: create_tables

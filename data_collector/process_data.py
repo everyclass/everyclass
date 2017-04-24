@@ -15,7 +15,7 @@ from termcolor import cprint
 def process_data(xq):
     class_info = {}
     class_list = []
-    students_set = set([])
+    students_list = []
     names_json = open("stu_data.json")
     names = json.load(names_json)
     conn = mysql.connector.connect(**settings.MYSQL_CONFIG)
@@ -59,8 +59,8 @@ def process_data(xq):
                         class_fetch_result = cursor.fetchall()
                         if not class_fetch_result:
                             cprint('[ADD CLASS]', end='', color="blue", attrs=['bold'])
-                            students_set.clear()
-                            students_set.add(stu['xh'])
+                            students_list.clear()
+                            students_list.add(stu['xh'])
                             query = "insert into ec_classes_" + get_semester_code_for_db(
                                 xq) + " (clsname, day, time, teacher, duration, week, location, students, id) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                             if settings.DEBUG:
@@ -69,21 +69,21 @@ def process_data(xq):
                                 str(class_info['clsname']), class_time, row_number,
                                 str(class_info['teacher']),
                                 str(class_info['duration']), str(class_info['week']), str(class_info['location']),
-                                json.dumps(students_set),
+                                json.dumps(students_list),
                                 md5.hexdigest()))
                         else:
                             cprint('[APPEND STUDENT]', end='', color='blue', attrs=['bold'])
-                            students_set.clear()
-                            students_set = json.loads(class_fetch_result[0][7])
+                            students_list.clear()
+                            students_list = json.loads(class_fetch_result[0][7])
                             # For unknown reason, education management system in CSU may show your same classes twice,
                             # hence you need to check whether this happens
-                            if stu['xh'] not in students_set:
-                                students_set.add(stu['xh'])
+                            if stu['xh'] not in students_list:
+                                students_list.append(stu['xh'])
                                 query = "update ec_classes_" + get_semester_code_for_db(
                                     xq) + " set students=%s where id=%s"
                                 if settings.DEBUG:
                                     predefined.print_formatted_info(query)
-                                cursor.execute(query, (json.dumps(students_set), md5.hexdigest()))
+                                cursor.execute(query, (json.dumps(students_list), md5.hexdigest()))
                         del md5
                         print(class_info)
                         class_info.clear()
