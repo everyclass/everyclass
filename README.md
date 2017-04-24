@@ -1,7 +1,7 @@
 ## EveryClass @ CSU - A tool to know people taking same classes with you & add your classes to calendar on your phone.
 每课 @ CSU - 一个查询跟你上同一节课的人、并能将你的课表导入手机、电脑日历的工具
 
-To run this python programme, please use Python 3.5.0 (Doesnt support Python 2)
+*To run this python programme, please use Python 3.5.0 (Doesnt support Python 2)*
 
 
 ## IMPORTANT NOTICE 重要提示
@@ -16,7 +16,7 @@ Notice that this project is still under development, please DO NOT fork this rep
 Finished english class module. "data_collector" is basically finished. The project still has a long way to go.
 
 ----
-For English readme please scroll down.
+**For English readme please scroll down.**
 
 
 ## Chinese 中文

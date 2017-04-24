@@ -47,7 +47,7 @@ def process_english_students(xq):
         predefined.print_formatted_info(class_dict, True, 'Class_dict')
     cprint("Fetched %s records in %s pages" % (records_count, pages_count), color='magenta')
     while this_page <= pages_count:
-        cprint("Now processing page %s:" % (this_page),color='cyan')
+        cprint("Now processing page %s:" % this_page, color='cyan')
         data = dict(pageNo=this_page)
         req = s.get(url, headers=header_info, params=data)
         json_string = req.content.decode(encoding='utf-8')
@@ -97,7 +97,7 @@ def process_english_students(xq):
         this_page += 1
     cursor.close()
     conn.close()
-    cprint("Finished!",color='green',attrs=['blink','bold'])
+    cprint("Finished!", color='green', attrs=['blink', 'bold'])
 
 
 def retrieve_english_classes(xq):
@@ -142,9 +142,9 @@ def retrieve_english_classes(xq):
             class_fetch_result = cursor.fetchall()
             if not class_fetch_result:
                 cprint('[Add class]', "blue", attrs=["bold"], end='')
-                query = "insert into ec_classes_" + predefined.get_semester_code_for_db(
+                query = "INSERT INTO ec_classes_" + predefined.get_semester_code_for_db(
                     xq) + " (clsname, day, time, teacher, duration, week, location, students, id) "" \
-                    ""values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    ""VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 predefined.print_formatted_info("SQL: " + query)
                 cursor.execute(query, (
                     this_clsname, this_day, this_time, this_teacher, this_duration,
