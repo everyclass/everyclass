@@ -13,7 +13,11 @@ Notice that this project is still under development, please DO NOT fork this rep
 ## Our latest progress 最新进度
 
 #### Apr 24
-Finished english class module. "data_collector" is basically finished. The project still has a long way to go.
+Finished english class module. "data_collector" is basically finished. 
+
+#### Next step
+- 完成 server 前后端
+- 完成 .ics 文件生成模块
 
 ----
 **For English readme please scroll down.**

@@ -32,7 +32,6 @@ def retrieve_classtable():
         'xs': u'xs',
         'sfFD': '1'
     }
-    global s
     s = requests.session()
     for i in stu_data:
         data['xs0101id'] = i['xs0101id']

@@ -1,6 +1,5 @@
 # Find relationships between student number prefix and the faculty he/she is in from English class system and save
 # them to table ec_stu_id_prefix
-# todo ec_stu_id_prefix
 import requests
 import json
 import mysql.connector
