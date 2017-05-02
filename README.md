@@ -1,12 +1,12 @@
-## EveryClass @ CSU - A tool to know people taking same classes with you & add your classes to calendar on your phone.
-每课 @ CSU - 一个查询跟你上同一节课的人、并能将你的课表导入手机、电脑日历的工具
+## EveryClass @ CSU - A tool to import your classes to calendar on your phone and know who're taking same classes with you
+每课 @ CSU - 一个能将你的课表导入手机、电脑的日历，并查询跟你上同一节课的人的工具
 
-*To run this python programme, please use Python 3.5.0 (Doesnt support Python 2)*
+*To run this python programme, please use Python 3.5.0 or 3.6.0*
 
 
 ## IMPORTANT NOTICE 重要提示
 
-Notice that this project is still under development, please DO NOT fork this repository at the moment until we finish the first beta version. You can "watch" our progress now.
+Notice that this project is still under development, please DO NOT FORK this repository at the moment until we finish the first beta version. You can "watch" this repository now.
 
 这个项目尚未完成最初版本，请不要fork这个仓库直到我完成第一个完整的测试版。你可以先 Watch 关注项目进度：）
 
@@ -20,7 +20,7 @@ Finished english class module. "data_collector" is basically finished.
 - 完成 .ics 文件生成模块
 
 ----
-**For English readme please scroll down.**
+**For English version please scroll down.**
 
 
 ## Chinese 中文
@@ -44,7 +44,11 @@ EveryClass 是由就读于中南大学的 Frederic 主持创建的一个 Python 
 
 ##### 数据库和基础设置
 - 配置settings.py中的当前学期、数据库等信息；
-- 修改 sql/everyclass.sql 内的学期信息，然后将其拷贝到data_collector目录中，运行predefined.py，按照提示导入数据库
+- 导入 sql/everyclass.sql 内的数据到mysql数据库，你可能需要修改学期信息。如果你不知道怎么导入，`predefined.py`中有一个`create_tables`函数，你可以将 `everyclass.sql` 拷贝到`data_collector`目录中，在python shell中：
+```
+>>> from predefined import create_tables
+>>> create_tables()
+```
 
 ##### 学生信息采集
 - 通过各种手段取得包含学生基本信息的stu_data.json，保存在data_collector目录下（格式参见stu_data_sample.json，出于对本校学生信息的保护，恕不直接提供stu_data.json文件）

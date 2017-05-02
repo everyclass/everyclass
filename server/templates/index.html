@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="hero hero-homepage">
+        <img src="{{ url_for('static', filename='images/class.svg') }}" width="100" height="auto">
+        <h1 class="hero-header">EveryClass</h1>
+        <h4 class="text-muted">EveryClass 可以将你的课表导入到手机日历，让课程和你的其他日历事项在同一个地方展示，从此不再需要超级课程表。不仅如此，它还能查询和你上同一节课的同学。而且，这一切都是免费的。</h4>
+    </div>
+    <br><br>
+    <div class="row row-backbordered hidden-xs">
+        <div class="col-sm-12">
+            <div class="panel panel-default panel-floating panel-floating-inline">
+                <div class="panel-body">
+                    <div class="col-lg-6 hidden-xs">
+                        <div class="panel-content">
+                            <h5 class="m-b-0"><strong>输入你的学号，然后点击开始吧</strong></h5>
+                            <p class="text-muted">
+
+                            </p>
+                        </div>
+                    </div>
+                    <div class="clearfix visible-xs"></div>
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="panel-content">
+                            <div class="panel-actions">
+                                <form class="form-inline pull-right" action="{{ url_for('query') }}" method="post" id="search-form">
+                                    <input class="form-control input-lg panel-email-input" name="id"
+                                           placeholder="学号" style="display: inline-block">
+                                    <input type="submit" value="开始" name="开始" class="btn btn-lg"
+                                           style="display: inline-block" id="search-button">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-xs-10 col-xs-offset-1 visible-xs">
+        <div class="panel-content">
+            <div class="panel-actions">
+                <form class="form-inline centre" action="{{ url_for('query') }}" method="post" id="mobile-search-form">
+                    <div class="input-group">
+                        <input type="text" name="id" class="form-control" placeholder="学号">
+                        <span class="input-group-btn">
+						<button class="btn btn-default" type="submit" value="开始" name="开始">开始</button>
+					</span>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -77,83 +77,10 @@ def get_time_for_class(text):
         return '4'
     elif text == '9-10':
         return '5'
+    elif text == '9-1':
+        return '5'
     else:
         return '6'
-
-
-# Function: get_faculty_name
-def get_faculty_name(code):
-    if code == '01':
-        return '地球科学与信息物理学院'
-    elif code == '02':
-        return '资源与安全工程学院'
-    elif code == '03':
-        return '资源加工与生物工程学院'
-    elif code == '04':  # Not sure
-        return '地球科学与信息物理学院'
-    elif code == '05':
-        return '冶金与环境学院'
-    elif code == '06':
-        return '材料科学与工程学院'
-    elif code == '07':
-        return '粉末冶金研究院'
-    elif code == '08':
-        return '机电工程学院'
-    elif code == '09':
-        return '信息科学与工程学院'
-    elif code == '10':
-        return '能源科学与工程学院'
-    elif code == '11':
-        return '交通运输工程学院'
-    elif code == '12':
-        return '土木工程学院'
-    elif code == '13':
-        return '数学与统计学院'
-    elif code == '14':
-        return '物理与电子学院'
-    elif code == '15':
-        return '化学化工学院'
-    elif code == '16':
-        return '商学院'
-    elif code == '17':
-        return '文学与新闻传播学院'
-    elif code == '18':
-        return '外国语学院'
-    elif code == '19':
-        return '建筑与艺术学院'
-    elif code == '20':
-        return '法学院'
-    elif code == '21':
-        return '马克思主义学院'
-    elif code == '22':
-        return '湘雅医学院'
-    elif code == '23':
-        return '基础医学院'
-    elif code == '24':
-        return '药学院'
-    elif code == '25':
-        return '湘雅护理学院'
-    elif code == '26':
-        return '公共卫生学院'
-    elif code == '27':
-        return '口腔医学院'
-    elif code == '28':
-        return '生命科学学院'
-    elif code == '37':
-        return '生命科学学院'
-    elif code == '39':
-        return '软件学院'
-    elif code == '42':
-        return '航空航天学院'
-    elif code == '43':
-        return '公共管理学院'
-    elif code == '66':
-        return '体育教研部'
-    elif code == '93':
-        return '国际合作与交流处'
-    else:  # international students and so on
-        return '其他'
-
 
 # Function: print_formatted_info
 # Used to print debug info
@@ -191,26 +118,3 @@ def create_tables():
         cprint("Mysql Exception %d: %s" % (e.args[0], e.args[1]), "red")
     conn.commit()
     conn.close()
-
-
-# Function: input_accepted
-# Used to check if input is accepted when predefined.py is executed
-def input_accepted(__order):
-    if __order == "1":
-        print("This function will execute SQL sentences in 'everyclass.sql'\n"
-              "If you want to create table for a new semester you need to edit semester code in 'everyclass.sql' first.")
-        cprint("Input Y if you want to create table for a semester", attrs=["bold"])
-        sure = input()
-        if sure == "Y" or sure == "y":
-            create_tables()
-            exit()
-    else:
-        return 0
-
-
-if __name__ == "__main__":
-    order = 0
-    while not input_accepted(order):
-        cprint("EveryClass tools:", "green", attrs=["bold"])
-        print("1: Create table for a new semester")
-        order = input()

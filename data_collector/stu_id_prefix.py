@@ -56,21 +56,21 @@ def stu_id_prefix():
                 re_profess_compiled = re.compile(r'[0-9]{4,4}')
                 print("Now processing [%s]%s" % (each_people[6][0:4], re_profess_compiled.split(each_people[4])[0]))
                 # Query in ec_stu_id_prefix table
-                query = "SELECT name FROM ec_stu_id_prefix WHERE prefix=%s"
+                query = "SELECT name FROM ec_stu_id_prefix WHERE prefixes=%s"
                 cursor.execute(query, (each_people[6][0:4],))
                 fetch_result = cursor.fetchall()
                 if not fetch_result:
                     cprint('[Add]', end='', color='blue', attrs=['bold'])
-                    query = "INSERT INTO ec_stu_id_prefix (prefix, name) values (%s, %s)"
+                    query = "INSERT INTO ec_stu_id_prefix (prefixes, name) values (%s, %s)"
                     cursor.execute(query, (each_people[6][0:4], re_profess_compiled.split(each_people[4])[0]))
                     conn.commit()
                 else:
-                    # For unknown reason, there are different majors having same prefix, therefore you need to handle
+                    # For unknown reason, there are different majors having same prefixes, therefore you need to handle
                     # this situation.
                     cprint("[Prefix already in table]", color='green', attrs=['bold'], end='')
                     print(fetch_result[0][0])
                     if re_profess_compiled.split(each_people[4])[0] not in fetch_result[0][0]:
-                        query = "UPDATE ec_stu_id_prefix SET name=%s WHERE prefix=%s"
+                        query = "UPDATE ec_stu_id_prefix SET name=%s WHERE prefixes=%s"
                         cursor.execute(query, (
                             fetch_result[0][0] + ';' + re_profess_compiled.split(each_people[4])[0],
                             each_people[6][0:4]))
