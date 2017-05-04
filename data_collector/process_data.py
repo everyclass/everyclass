@@ -21,7 +21,7 @@ def process_data(xq):
     conn = mysql.connector.connect(**settings.MYSQL_CONFIG)
     cursor = conn.cursor()
     for stu in names:
-        cprint('Processing student: [%s]%s(id=%s)' % (stu['xh'], stu['xm'], stu['xs0101id']), attrs=["bold"])
+        cprint('Processing student: [%s]%s' % (stu['xh'], stu['xm']), attrs=["bold"])
         file_addr = os.path.join('raw_data', stu['xs0101id'])
         file = open(file_addr + '.html', 'r')
         soup = BeautifulSoup(file, 'html.parser')
@@ -60,7 +60,7 @@ def process_data(xq):
                         if not class_fetch_result:
                             cprint('[ADD CLASS]', end='', color="blue", attrs=['bold'])
                             students_list.clear()
-                            students_list.add(stu['xh'])
+                            students_list.append(stu['xh'])
                             query = "INSERT INTO ec_classes_" + get_semester_code_for_db(
                                 xq) + "(clsname, day, time, teacher, duration, week, location, students, id) VALUES (" \
                                       "%s, %s, %s, %s, %s, %s, %s, %s, %s) "
@@ -72,8 +72,8 @@ def process_data(xq):
                                 str(class_info['duration']), str(class_info['week']), str(class_info['location']),
                                 json.dumps(students_list),
                                 md5.hexdigest()))
+                            conn.commit()
                         else:
-                            cprint('[APPEND STUDENT]', end='', color='blue', attrs=['bold'])
                             students_list.clear()
                             students_list = json.loads(class_fetch_result[0][7])
                             # For unknown reason, education management system in CSU may show your same classes twice,
@@ -85,13 +85,15 @@ def process_data(xq):
                                 if settings.DEBUG:
                                     predefined.print_formatted_info(query)
                                 cursor.execute(query, (json.dumps(students_list), md5.hexdigest()))
+                                conn.commit()
+                                cprint('[APPEND STUDENT]', end='', color='blue', attrs=['bold'])
                         del md5
                         print(class_info)
                         class_info.clear()
             query = "INSERT INTO ec_students_" + get_semester_code_for_db(
                 xq) + " (xs0101id, name, xh, classes) VALUES (%s, %s, %s, %s)"
             if settings.DEBUG:
-                print('Classlist(%s): %s' % (len(class_list), class_list))
+                print('Class list(%s): %s' % (len(class_list), class_list))
             class_list.clear()
             if settings.DEBUG:
                 predefined.print_formatted_info(query)

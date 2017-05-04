@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% block title %}{{ name }}的课表 - EveryClass @ CSU{% endblock %}
 {% block body %}
     <div class="hero hero-homepage">
         <h1 class="hero-header">{{ name }}的课表</h1>
@@ -35,9 +36,11 @@
                                         <td>
                                             {% for every_class in classes[(day, time)] %}
                                                 <b>{{ every_class['name'] }}</b><br>{{ every_class['teacher'] }}<br>
-                                                {{ every_class['duration'] }}{{ every_class['week'] }}，
-                                                {{ every_class['location'] }}<br>
-                                                <a href="{{ url_for('get_classmates',class_id=every_class['id']) }}">查看同学</a>
+                                                {{ every_class['duration'] }}{{ every_class['week'] }}
+                                                {% if every_class['location']!='None' %}
+                                                    ，{{ every_class['location'] }}
+                                                {% endif %}
+                                                <br><a href="{{ url_for('get_classmates',class_id=every_class['id']) }}">查看同学</a>
                                                 <br>
                                             {% endfor %}
                                         </td>

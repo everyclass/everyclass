@@ -12,7 +12,7 @@
                 <div class="panel-body">
                     <div class="col-lg-6 hidden-xs">
                         <div class="panel-content">
-                            <h5 class="m-b-0"><strong>输入你的学号，然后点击开始吧</strong></h5>
+                            <h5 class="m-b-0"><strong>输入你的学号或姓名，然后点击开始吧</strong></h5>
                         </div>
                     </div>
                     <div class="clearfix visible-xs"></div>
@@ -21,7 +21,7 @@
                             <div class="panel-actions">
                                 <form class="form-inline pull-right" action="{{ url_for('query') }}" method="post" id="search-form">
                                     <input class="form-control input-lg panel-email-input" name="id"
-                                           placeholder="学号" style="display: inline-block">
+                                           placeholder="学号或姓名" style="display: inline-block">
                                     <input type="submit" value="开始" name="开始" class="btn btn-lg"
                                            style="display: inline-block" id="search-button">
                                 </form>

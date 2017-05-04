@@ -12,8 +12,8 @@ Notice that this project is still under development, please DO NOT FORK this rep
 
 ## Our latest progress 最新进度
 
-#### May 2
-Basically finished server front-end and back-end.
+#### May 4
+网站前后端基本完成
 
 #### Next step
 - 收集学号前缀和专业对应关系信息

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
     <meta name="description" content="一个用来将课表导入到手机日历，并能查询和你同一节课的人的小工具。"/>
-    <title>EveryClass @ CSU by Frederic</title>
+    <title>{% block title %}EveryClass @ CSU by Frederic{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
     <link href="{{ url_for('static', filename='style.min.css') }}" rel="stylesheet" type="text/css" media="all"/>
     <!--[if lt IE 9]>
