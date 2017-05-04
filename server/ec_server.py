@@ -2,7 +2,7 @@ import mysql.connector
 import json
 import time
 from termcolor import cprint
-from predefined import get_day_chinese, get_time_chinese, get_semester_code_for_db, faculty_lookup
+from predefined import get_day_chinese, get_time_chinese, get_semester_code_for_db, faculty_lookup, is_chinese
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash, escape
 
@@ -181,8 +181,27 @@ def about():
 # 用于查询本人课表
 @app.route('/query', methods=['GET', 'POST'])
 def query():
-    if request.values.get('id'):
-        student_id = request.values.get('id')
+    if request.values.get('id'):  # 带有 id 参数（可为姓名或学号）
+        id_or_name = request.values.get('id')
+        if is_chinese(id_or_name[0:1]) and is_chinese(id_or_name[-1:]):  # 首末均为中文
+            db = get_db()
+            cursor = db.cursor()
+            mysql_query = "SELECT name,xh FROM ec_students_" + get_semester_code_for_db(
+                app.config['SEMESTER']) + " WHERE name=%s"
+            cursor.execute(mysql_query, (id_or_name,))
+            result = cursor.fetchall()
+            if cursor.rowcount > 1:  # 查询到多个同名，进入选择界面
+                students_list = list()
+                for each_student in result:
+                    students_list.append([each_student[0],each_student[1], faculty_lookup(each_student[1]), major_lookup(each_student[1]),class_lookup(each_student[1])])
+                return render_template("query_same_name.html", count=cursor.rowcount, student_info=students_list)
+            elif cursor.rowcount == 1:  # 仅能查询到一个人，则赋值学号
+                student_id = result[0][1]
+            else:
+                flash("没有这个名字的学生哦")
+                return redirect(url_for('main'))
+        else:  # id 为学号
+            student_id = request.values.get('id')
         session['stu_id'] = student_id
     elif session['stu_id']:
         student_id = session['stu_id']

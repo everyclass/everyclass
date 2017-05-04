@@ -112,3 +112,10 @@ def faculty_lookup(student_id):
         return '国际合作与交流处'
     else:
         return '未知'
+
+
+def is_chinese(uchar):
+    if u'\u4e00' <= uchar <= u'\u9fa5':
+        return True
+    else:
+        return False
