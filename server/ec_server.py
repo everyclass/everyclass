@@ -2,8 +2,9 @@ import mysql.connector
 import json
 import time
 from termcolor import cprint
+from predefined import get_day_chinese, get_time_chinese, get_semester_code_for_db, faculty_lookup
 from flask import Flask, request, session, g, redirect, url_for, abort, \
-    render_template, flash
+    render_template, flash, escape
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -15,8 +16,8 @@ app.config.update(dict(
         'database': 'everyclass',
         'raise_on_warnings': True,
     },
-    DEBUG=True,
-    SECRET_KEY='development key',
+    DEBUG=True,  # Must set DEBUG=False in production!
+    SECRET_KEY='development key',  # be sure to change this in production!
     SEMESTER='2016-2017-2',
     DATA_LAST_UPDATE_TIME='Apr. 29, 2017'
 ))
@@ -29,16 +30,6 @@ class NoClassException(ValueError):
 
 class NoStudentException(ValueError):
     pass
-
-
-# 获取用于数据表命名的学期，输入2016-2017-2，输出16_17_2
-def get_semester_code_for_db(xq):
-    if xq == '':
-        return get_semester_code_for_db(app.config['SEMESTER'])
-    else:
-        import re
-        splited = re.split('-', xq)
-        return str(splited[0][2:4] + "_" + splited[1][2:4] + "_" + splited[2])
 
 
 # 调试输出函数
@@ -57,78 +48,26 @@ def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
         cprint("----" + info_about + " ENDS----", "blue", attrs=['bold'])
 
 
-def faculty_lookup(student_id):
-    code = student_id[0:2]
-    if code == '01':
-        return '地球科学与信息物理学院'
-    elif code == '02':
-        return '资源与安全工程学院'
-    elif code == '03':
-        return '资源加工与生物工程学院'
-    elif code == '04':  # Not sure
-        return '地球科学与信息物理学院'
-    elif code == '05':
-        return '冶金与环境学院'
-    elif code == '06':
-        return '材料科学与工程学院'
-    elif code == '07':
-        return '粉末冶金研究院'
-    elif code == '08':
-        return '机电工程学院'
-    elif code == '09':
-        return '信息科学与工程学院'
-    elif code == '10':
-        return '能源科学与工程学院'
-    elif code == '11':
-        return '交通运输工程学院'
-    elif code == '12':
-        return '土木工程学院'
-    elif code == '13':
-        return '数学与统计学院'
-    elif code == '14':
-        return '物理与电子学院'
-    elif code == '15':
-        return '化学化工学院'
-    elif code == '16':
-        return '商学院'
-    elif code == '17':
-        return '文学与新闻传播学院'
-    elif code == '18':
-        return '外国语学院'
-    elif code == '19':
-        return '建筑与艺术学院'
-    elif code == '20':
-        return '法学院'
-    elif code == '21':
-        return '马克思主义学院'
-    elif code == '22':
-        return '湘雅医学院'
-    elif code == '23':
-        return '基础医学院'
-    elif code == '24':
-        return '药学院'
-    elif code == '25':
-        return '湘雅护理学院'
-    elif code == '26':
-        return '公共卫生学院'
-    elif code == '27':
-        return '口腔医学院'
-    elif code == '28':
-        return '生命科学学院'
-    elif code == '37':
-        return '生命科学学院'
-    elif code == '39':
-        return '软件学院'
-    elif code == '42':
-        return '航空航天学院'
-    elif code == '43':
-        return '公共管理学院'
-    elif code == '66':
-        return '体育教研部'
-    elif code == '93':
-        return '国际合作与交流处'
-    else:  # international students and so on
-        return '其他'
+# 查询专业信息
+def major_lookup(student_id):
+    code = student_id[0:4]
+    db = get_db()
+    cursor = db.cursor()
+    mysql_query = "SELECT name FROM ec_stu_id_prefix WHERE prefix=%s"
+    cursor.execute(mysql_query, (code,))
+    result = cursor.fetchall()
+    if result:
+        return result[0][0]
+    else:
+        return "未知"
+
+
+# 查询学生所在班级
+def class_lookup(student_id):
+    if len(student_id) == 10 and student_id.isdigit():
+        return student_id[4:8]
+    else:
+        return "未知"
 
 
 # 初始化数据库连接
@@ -155,15 +94,16 @@ def close_db(error):
 def get_classes_for_student(student_id):
     db = get_db()
     cursor = db.cursor()
-    mysql_query = "SELECT * FROM ec_students_" + get_semester_code_for_db(app.config['SEMESTER']) + " WHERE xh=%s"
+    mysql_query = "SELECT name,classes FROM ec_students_" + get_semester_code_for_db(
+        app.config['SEMESTER']) + " WHERE xh=%s"
     cursor.execute(mysql_query, (student_id,))
     result = cursor.fetchall()
     if not result:
         cursor.close()
         raise NoStudentException
     else:
-        student_name = result[0][1]
-        student_classes_list = json.loads(result[0][3])
+        student_name = result[0][0]
+        student_classes_list = json.loads(result[0][1])
         student_classes = dict()
         for classes in student_classes_list:
             mysql_query = "SELECT clsname,day,time,teacher,duration,week,location,id FROM ec_classes_" + \
@@ -177,35 +117,41 @@ def get_classes_for_student(student_id):
                                                                       week=result[0][5], location=result[0][6],
                                                                       id=result[0][7]))
         cursor.close()
-        return student_id, student_name, student_classes
+        return student_name, student_classes
 
 
 # 获得一门课程的全部学生，若有学生，返回学生列表（包含姓名、学号、学院、专业、班级），否则引出 exception
 def get_students_in_class(class_id):
     db = get_db()
     cursor = db.cursor()
-    mysql_query = "SELECT students FROM ec_classess_" + get_semester_code_for_db(
+    mysql_query = "SELECT students,clsname,day,time,teacher FROM ec_classes_" + get_semester_code_for_db(
         app.config['SEMESTER']) + " WHERE id=%s"
     cursor.execute(mysql_query, (class_id,))
     result = cursor.fetchall()
     if not result:
         cursor.close()
-        raise NoClassException
+        raise NoClassException(class_id)
     else:
         students = json.loads(result[0][0])
         students_info = list()
+        class_name = result[0][1]
+        class_day = result[0][2]
+        class_time = result[0][3]
+        class_teacher = result[0][4]
         if not students:
             cursor.close()
             raise NoStudentException
         for each_student in students:
-            mysql_query = "SELECT name,xh FROM ec_students_" + get_semester_code_for_db(
+            mysql_query = "SELECT name FROM ec_students_" + get_semester_code_for_db(
                 app.config['SEMESTER']) + " WHERE xh=%s"
             cursor.execute(mysql_query, (each_student,))
             result = cursor.fetchall()
             # 信息包含姓名、学号、学院、专业、班级
-            students_info.append([result[0][0], result[0][1], faculty_lookup(each_student)])
+            students_info.append(
+                [result[0][0], each_student, faculty_lookup(each_student), major_lookup(each_student),
+                 class_lookup(each_student)])
         cursor.close()
-        return students_info
+        return class_name, class_day, class_time, class_teacher, students_info
 
 
 # 首页
@@ -231,13 +177,21 @@ def guide():
 def about():
     return render_template('about.html')
 
+
 # 用于查询本人课表
-@app.route('/query', methods=['POST'])
+@app.route('/query', methods=['GET', 'POST'])
 def query():
+    if request.values.get('id'):
+        student_id = request.values.get('id')
+        session['stu_id'] = student_id
+    elif session['stu_id']:
+        student_id = session['stu_id']
+    else:
+        return redirect(url_for('main'))
     try:
-        student_id, student_name, student_classes = get_classes_for_student(request.form['id'])
+        student_name, student_classes = get_classes_for_student(student_id)
     except NoStudentException:
-        flash('对不起，没有在数据库中找到你哦。学号是不是输错了？你刚刚输入的是%s' % request.form['id'])
+        flash('对不起，没有在数据库中找到你哦。学号是不是输错了？你刚刚输入的是%s' % escape(student_id))
         return redirect(url_for('main'))
     else:
         # 空闲周末判断，考虑到大多数人周末都是没有课程的
@@ -269,21 +223,24 @@ def generate_ics():
 @app.route('/classmates')
 def get_classmates():
     try:
-        students_info = get_students_in_class(request.form['class_id'])
-    except NoClassException:
-        flash('没有这门课程')
+        class_name, class_day, class_time, class_teacher, students_info = get_students_in_class(
+            request.values.get('class_id', None))
+    except NoClassException as e:
+        flash('没有这门课程:%s' % (e,))
         return redirect(url_for('main'))
     except NoStudentException:
         flash('这门课程没有学生')
         return redirect(url_for('main'))
     else:
-        return render_template('classmate.html', students=students_info)
+        return render_template('classmate.html', class_name=class_name, class_day=get_day_chinese(class_day),
+                               class_time=get_time_chinese(class_time), class_teacher=class_teacher,
+                               students=students_info)
 
 
 # 404跳转回首页
 @app.errorhandler(404)
 def page_not_found(error):
-    return redirect(url_for('main'))
+    return redirect(url_for('main')), 404
 
 
 # 405跳转回首页

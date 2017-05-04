@@ -8,15 +8,15 @@
 
 Notice that this project is still under development, please DO NOT FORK this repository at the moment until we finish the first beta version. You can "watch" this repository now.
 
-这个项目尚未完成最初版本，请不要fork这个仓库直到我完成第一个完整的测试版。你可以先 Watch 关注项目进度：）
+这个项目尚未完成最初版本，请不要克隆这个仓库直到我完成第一个完整的测试版。你可以先 Watch 关注项目进度：）
 
 ## Our latest progress 最新进度
 
-#### Apr 24
-Finished english class module. "data_collector" is basically finished. 
+#### May 2
+Basically finished server front-end and back-end.
 
 #### Next step
-- 完成 server 前后端
+- 收集学号前缀和专业对应关系信息
 - 完成 .ics 文件生成模块
 
 ----
@@ -29,7 +29,7 @@ Finished english class module. "data_collector" is basically finished.
 EveryClass 是由就读于中南大学的 Frederic 主持创建的一个 Python 项目。它有两个基本功能：
 - 查询跟你上同一节课的人的名字、学院、班级
 - 生成你的课表ics文件，你可以将其导入到手机和电脑的日历（支持iOS、Mac、安卓），不用每次还单独打开课程格子看课表了
-如果你是中南大学的学生，直接访问 http://every.admirable.one 即可使用本程序的功能，无需阅读下面的内容；如果你来自其他大学，你可以邀请小伙伴们克隆这个项目并创建适用于自己的学校的分支。
+如果你是中南大学的学生，直接访问 http://every.admirable.one 即可使用本程序的功能，无需阅读下面的内容；如果你来自其他大学，你可以邀请小伙伴们fork这个项目并创建适用于自己的学校的分支。
 
 ### 文件目录
 - `data_collector`: 从教务管理系统采集数据的程序
@@ -44,7 +44,7 @@ EveryClass 是由就读于中南大学的 Frederic 主持创建的一个 Python 
 
 ##### 数据库和基础设置
 - 配置settings.py中的当前学期、数据库等信息；
-- 导入 sql/everyclass.sql 内的数据到mysql数据库，你可能需要修改学期信息。如果你不知道怎么导入，`predefined.py`中有一个`create_tables`函数，你可以将 `everyclass.sql` 拷贝到`data_collector`目录中，在python shell中：
+- 导入 sql/everyclass.sql 内的数据到mysql数据库，你可能需要修改学期信息。如果你不知道怎么导入，你可以将 `everyclass.sql` 拷贝到`data_collector`目录中，然后在python shell中：
 ```
 >>> from predefined import create_tables
 >>> create_tables()
@@ -74,6 +74,9 @@ EveryClass 是由就读于中南大学的 Frederic 主持创建的一个 Python 
 
 #### server
 等待补充
+
+
+
 
 
 ## English
