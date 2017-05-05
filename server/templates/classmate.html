@@ -27,7 +27,7 @@
                                 <td>{{ each_student[0] }}</td>
                                 <td>{{ each_student[1] }}</td>
                                 <td>{{ each_student[2] }}</td>
-                                <td>{{ each_student[3] }}{{ each_student[4] }}</td>
+                                <td>{{ each_student[3] }} {{ each_student[4] }}</td>
                                 <td><a href="{{ url_for('query', id=each_student[1]) }}">查看课表</a></td>
                             </tr>
                         {% endfor %}

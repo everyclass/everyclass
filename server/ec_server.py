@@ -1,8 +1,9 @@
 import mysql.connector
 import json
 import time
+import re
 from termcolor import cprint
-from predefined import get_day_chinese, get_time_chinese, get_semester_code_for_db, faculty_lookup, is_chinese
+from predefined import get_day_chinese, get_time_chinese, faculty_lookup, is_chinese
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash, escape
 
@@ -32,6 +33,16 @@ class NoStudentException(ValueError):
     pass
 
 
+# 获取用于数据表命名的学期，输入2016-2017-2，输出16_17_2
+def get_semester_code_for_db(xq):
+    if xq == '':
+        return get_semester_code_for_db(app.config['SEMESTER'])
+    else:
+        import re
+        splited = re.split('-', xq)
+        return str(splited[0][2:4] + "_" + splited[1][2:4] + "_" + splited[2])
+
+
 # 调试输出函数
 def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
     if show_debug_tip:
@@ -50,7 +61,7 @@ def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
 
 # 查询专业信息
 def major_lookup(student_id):
-    code = student_id[0:4]
+    code = re.findall(r'\d{4}', student_id)[0]
     db = get_db()
     cursor = db.cursor()
     mysql_query = "SELECT name FROM ec_stu_id_prefix WHERE prefix=%s"
@@ -64,8 +75,9 @@ def major_lookup(student_id):
 
 # 查询学生所在班级
 def class_lookup(student_id):
-    if len(student_id) == 10 and student_id.isdigit():
-        return student_id[4:8]
+    re_split_result = re.findall(r'\d{4}', student_id)[1]
+    if 10 < int(re_split_result[0:2]) < 20:  # 正则提取后切片切出来的班级一般是正确的，但有的学生学号并不是标准格式，因此这里对班级的前两位做一个年份判断(2010<年份<2020)
+        return re_split_result
     else:
         return "未知"
 
@@ -90,7 +102,7 @@ def close_db(error):
         g.mysql_db.close()
 
 
-# 获得一个学生的全部课程，学生存在则返回学号、姓名、课程 dict（键值为 day、time 组成的 tuple），否则引出 exception
+# 获得一个学生的全部课程，学生存在则返回姓名、课程 dict（键值为 day、time 组成的 tuple），否则引出 exception
 def get_classes_for_student(student_id):
     db = get_db()
     cursor = db.cursor()
@@ -120,7 +132,7 @@ def get_classes_for_student(student_id):
         return student_name, student_classes
 
 
-# 获得一门课程的全部学生，若有学生，返回学生列表（包含姓名、学号、学院、专业、班级），否则引出 exception
+# 获得一门课程的全部学生，若有学生，返回课程名称、课程时间（day、time）、任课教师、学生列表（包含姓名、学号、学院、专业、班级），否则引出 exception
 def get_students_in_class(class_id):
     db = get_db()
     cursor = db.cursor()
@@ -172,12 +184,6 @@ def guide():
     return render_template('guide.html')
 
 
-# 关于
-@app.route('/guide')
-def about():
-    return render_template('about.html')
-
-
 # 用于查询本人课表
 @app.route('/query', methods=['GET', 'POST'])
 def query():
@@ -193,7 +199,8 @@ def query():
             if cursor.rowcount > 1:  # 查询到多个同名，进入选择界面
                 students_list = list()
                 for each_student in result:
-                    students_list.append([each_student[0],each_student[1], faculty_lookup(each_student[1]), major_lookup(each_student[1]),class_lookup(each_student[1])])
+                    students_list.append([each_student[0], each_student[1], faculty_lookup(each_student[1]),
+                                          major_lookup(each_student[1]), class_lookup(each_student[1])])
                 return render_template("query_same_name.html", count=cursor.rowcount, student_info=students_list)
             elif cursor.rowcount == 1:  # 仅能查询到一个人，则赋值学号
                 student_id = result[0][1]
@@ -232,10 +239,15 @@ def query():
                                empty_wkend=empty_wkend, empty_6=empty_6, empty_5=empty_5)
 
 
+# 导出日历交换格式文件
 @app.route('/calendar')
 def generate_ics():
-    from generate_ics import generate_ics
-    return render_template('ics.html', ics=generate_ics(request.form['id']))
+    if session['stu_id']:
+        from generate_ics import generate_ics
+        generate_ics(session['stu_id'])
+        return render_template('ics.html', student_id=session['stu_id'])
+    else:
+        return redirect(url_for('main'))
 
 
 # 同学名单

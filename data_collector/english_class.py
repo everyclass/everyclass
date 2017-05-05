@@ -117,7 +117,7 @@ def retrieve_english_classes(xq):
         if not isinstance(each_class[2], int):  # Exclude first invalid line
             this_clsname = "英语约课" + each_class[4]
             this_day = predefined.get_day_for_class(each_class[4][1:3])
-            this_time = predefined.get_time_for_class(each_class[4][4:7])# 这里切片实际上是有问题的，"9-10"会切成"9-1"，之前被坑过了
+            this_time = predefined.get_time_for_class(each_class[4][4:7])  # 这里切片实际上是有问题的，"9-10"会切成"9-1"，之前被坑过了
             this_teacher = each_class[3]
             if each_class[2][0] == '双':
                 this_duration = "4-16"

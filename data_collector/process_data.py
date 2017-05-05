@@ -80,8 +80,8 @@ def process_data(xq):
                             # hence you need to check whether this happens
                             if stu['xh'] not in students_list:
                                 students_list.append(stu['xh'])
-                                query = "update ec_classes_" + get_semester_code_for_db(
-                                    xq) + " set students=%s where id=%s"
+                                query = "UPDATE ec_classes_" + get_semester_code_for_db(
+                                    xq) + " SET students=%s WHERE id=%s"
                                 if settings.DEBUG:
                                     predefined.print_formatted_info(query)
                                 cursor.execute(query, (json.dumps(students_list), md5.hexdigest()))
@@ -92,18 +92,22 @@ def process_data(xq):
                         class_info.clear()
             query = "INSERT INTO ec_students_" + get_semester_code_for_db(
                 xq) + " (xs0101id, name, xh, classes) VALUES (%s, %s, %s, %s)"
+            # 对 class_list 去重
+            class_list_final = list(set(class_list))
+            class_list_final.sort(key=class_list.index)
             if settings.DEBUG:
-                print('Class list(%s): %s' % (len(class_list), class_list))
-            class_list.clear()
-            if settings.DEBUG:
+                print('Class list(%s): %s' % (len(class_list_final), class_list_final))
                 predefined.print_formatted_info(query)
-            cursor.execute(query, (stu['xs0101id'], stu['xm'], stu['xh'], json.dumps(class_list)))
+            cursor.execute(query, (stu['xs0101id'], stu['xm'], stu['xh'], json.dumps(class_list_final)))
             conn.commit()
+            class_list.clear()
+            class_list_final.clear()
         else:
             cprint('[PASS] STUDENT ALREADY EXISTS', color='green', attrs=['bold'])
         print('\n')
     cursor.close()
     conn.close()
+    cprint("Finished!", color='red')
 
 
 if __name__ == '__main__':

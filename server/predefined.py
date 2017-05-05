@@ -30,18 +30,9 @@ def get_time_chinese(digit):
         return '第11-12节'
 
 
-# 获取用于数据表命名的学期，输入2016-2017-2，输出16_17_2
-def get_semester_code_for_db(xq):
-    if xq == '':
-        return get_semester_code_for_db(app.config['SEMESTER'])
-    else:
-        import re
-        splited = re.split('-', xq)
-        return str(splited[0][2:4] + "_" + splited[1][2:4] + "_" + splited[2])
-
-
 def faculty_lookup(student_id):
-    code = student_id[0:2]
+    import re
+    code = re.findall(r'\d{2}', student_id)[0]
     if code == '01':
         return '地球科学与信息物理学院'
     elif code == '02':
