@@ -30,6 +30,21 @@ def get_time_chinese(digit):
         return '第11-12节'
 
 
+def get_time(digit):
+    if digit == 1:
+        return '第1-2节'
+    elif digit == 2:
+        return '第3-4节'
+    elif digit == 3:
+        return '第5-6节'
+    elif digit == 4:
+        return '第7-8节'
+    elif digit == 5:
+        return '第9-10节'
+    else:
+        return '第11-12节'
+
+
 def faculty_lookup(student_id):
     import re
     code = re.findall(r'\d{2}', student_id)[0]

@@ -1,28 +1,16 @@
 import mysql.connector
 import json
-import time
+import os
 import re
 from termcolor import cprint
-from predefined import get_day_chinese, get_time_chinese, faculty_lookup, is_chinese
+from config import load_config
+from predefine import get_day_chinese, get_time_chinese, faculty_lookup, is_chinese
 from flask import Flask, request, session, g, redirect, url_for, abort, \
-    render_template, flash, escape
+    render_template, flash, escape, send_from_directory
 
 app = Flask(__name__)
-app.config.update(dict(
-    MYSQL_CONFIG={
-        'user': 'everyclass_user',
-        'password': 'everyclass_pwd',
-        'host': '127.0.0.1',
-        'port': '3306',
-        'database': 'everyclass',
-        'raise_on_warnings': True,
-    },
-    DEBUG=True,  # Must set DEBUG=False in production!
-    SECRET_KEY='development key',  # be sure to change this in production!
-    SEMESTER='2016-2017-2',
-    DATA_LAST_UPDATE_TIME='Apr. 29, 2017'
-))
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+os.environ['MODE'] = 'DEVELOPMENT'
+app.config.from_object(load_config())
 
 
 class NoClassException(ValueError):
@@ -242,12 +230,20 @@ def query():
 # 导出日历交换格式文件
 @app.route('/calendar')
 def generate_ics():
+    if request.values.get('id'):
+        session['stu_id'] = request.values.get('id')
     if session['stu_id']:
         from generate_ics import generate_ics
-        generate_ics(session['stu_id'])
+        student_name, student_classes = get_classes_for_student(session['stu_id'])
+        generate_ics(session['stu_id'], student_name, student_classes)
         return render_template('ics.html', student_id=session['stu_id'])
     else:
         return redirect(url_for('main'))
+
+
+@app.route('/<student_id>.ics')
+def get_ics(student_id):
+    return send_from_directory("ics", student_id + ".ics")
 
 
 # 同学名单
@@ -271,7 +267,7 @@ def get_classmates():
 # 404跳转回首页
 @app.errorhandler(404)
 def page_not_found(error):
-    return redirect(url_for('main')), 404
+    return redirect(url_for('main'))
 
 
 # 405跳转回首页
