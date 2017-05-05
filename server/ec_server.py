@@ -261,3 +261,19 @@ def method_not_allowed(error):
 
 if __name__ == '__main__':
     app.run()
+    app.add_url_rule('/android-chrome-192x192.png',
+                     redirect_to=url_for('static', filename='android-chrome-192x192.png'))
+    app.add_url_rule('/android-chrome-512x512.png',
+                     redirect_to=url_for('static', filename='android-chrome-512x512.png'))
+    app.add_url_rule('/apple-touch-icon.png', redirect_to=url_for('static', filename='/images/apple-touch-icon.png'))
+    app.add_url_rule('/browserconfig.xml', redirect_to=url_for('static', filename='browserconfig.xml'))
+    app.add_url_rule('/favicon-16x16.png', redirect_to=url_for('static', filename='/images/favicon-16x16.png'))
+    app.add_url_rule('/favicon-32x32.png', redirect_to=url_for('static', filename='/images/favicon-32x32.png'))
+    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='/images/favicon.ico'))
+    app.add_url_rule('/manifest.json', redirect_to=url_for('static', filename='manifest.json'))
+    app.add_url_rule('/mstile-150x150.png', redirect_to=url_for('static', filename='/images/mstile-150x150.png'))
+    app.add_url_rule('/safari-pinned-tab.svg', redirect_to=url_for('static', filename='/images/safari-pinned-tab.svg'))
+    app.add_url_rule('/android-chrome-192x192.png',
+                     redirect_to=url_for('static', filename='/images/android-chrome-192x192.png'))
+    app.add_url_rule('/android-chrome-512x512.png',
+                     redirect_to=url_for('static', filename='/images/android-chrome-512x512.png'))

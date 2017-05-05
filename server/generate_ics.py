@@ -53,7 +53,7 @@ def __get_datetime(week, day, time):
 # Add event
 def __add_event(name, times, location, teacher, student_id):
     event = Event()
-    event.add('transp', 'transparent')
+    event.add('transp', 'TRANSPARENT')
     summary = name
     if location != 'None':
         summary = name + '@' + location
@@ -66,6 +66,7 @@ def __add_event(name, times, location, teacher, student_id):
     event.add('description', description)
     event.add('dtstart', times[0])
     event.add('dtend', times[1])
+    event.add('last-modified',datetime.now())
     event['uid'] = 'ec-CSU' + student_id + 't' + datetime.now().strftime('%y%m%d%H%M%S%f') + '@admirable.one'
     event.add('rrule', {'freq': 'weekly', 'interval': times[2],
                         'until': times[3]})

@@ -1,13 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}课表导出 - EveryClass @ CSU{% endblock %}
+{% block title %}使用指南 - EveryClass @ CSU{% endblock %}
 {% block body %}
-    <h1 class="rte-heading text-center">导出课表到日历</h1>
+    <h1 class="rte-heading text-center">使用指南</h1>
     <div class="row">
         <div class="rte col-md-offset-2 col-md-8 col-sm-12 col-sm-offset-0">
-            <h4 class="p1">你的 iCal 日历交换文件地址为：{{ url_for('get_ics', student_id=student_id,_external=True) }}<br>
-                <a href="webcal://{{ config.SERVER_NAME }}{{ url_for('get_ics', student_id=student_id) }}">点击添加到日历</a><br><br>
-                如果你在使用微信等 App 内置浏览器，你可能需要选择用浏览器打开↗️
-            </h4>
+            <h4 class="p1"><br>如果你在使用微信等 App 内置浏览器，你可能需要选择用浏览器打开↗️</h4>
 
             <p class="p1"><span class="s1"><b>把课表添加到日历有什么用？<br></b></span>把课表添加到日历能让你在同一处集中管理每日课表和其他日程，同时，借助 <a href="https://www.dida365.com/" target="_blank">滴答清单</a> 等强大好用的 App 的配合，你会发现自己可以把每天过的井井有条。<br>如果你的系统日历跟其他地方（如 Google Calendar）设置了云同步，那么每一处都可以有你的课表，从此再也不用超级课程表、课程格子等单独的课程表 App 了。
             </p>
