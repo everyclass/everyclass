@@ -32,17 +32,17 @@ def get_time_chinese(digit):
 
 def get_time(digit):
     if digit == 1:
-        return '第1-2节'
+        return [(8, 00), (9, 40)]
     elif digit == 2:
-        return '第3-4节'
+        return [(10, 00), (11, 40)]
     elif digit == 3:
-        return '第5-6节'
+        return [(14, 00), (15, 40)]
     elif digit == 4:
-        return '第7-8节'
+        return [(16, 00), (17, 40)]
     elif digit == 5:
-        return '第9-10节'
+        return [(19, 00), (20, 40)]
     else:
-        return '第11-12节'
+        return [(21, 00), (22, 40)]
 
 
 def faculty_lookup(student_id):
@@ -125,3 +125,20 @@ def is_chinese(uchar):
         return True
     else:
         return False
+
+
+# 调试输出函数
+def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
+    from termcolor import cprint
+    if show_debug_tip:
+        cprint("-----" + info_about + "-----", "blue", attrs=['bold'])
+    if isinstance(info, dict):
+        for (k, v) in info.items():
+            print("%s =" % k, v)
+    elif isinstance(info, str):
+        cprint(info, attrs=["bold"])
+    else:
+        for each_info in info:
+            print(each_info)
+    if show_debug_tip:
+        cprint("----" + info_about + " ENDS----", "blue", attrs=['bold'])

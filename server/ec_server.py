@@ -2,9 +2,8 @@ import mysql.connector
 import json
 import os
 import re
-from termcolor import cprint
 from config import load_config
-from predefine import get_day_chinese, get_time_chinese, faculty_lookup, is_chinese
+from predefine import get_day_chinese, get_time_chinese, faculty_lookup, is_chinese, print_formatted_info
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash, escape, send_from_directory
 
@@ -29,22 +28,6 @@ def get_semester_code_for_db(xq):
         import re
         splited = re.split('-', xq)
         return str(splited[0][2:4] + "_" + splited[1][2:4] + "_" + splited[2])
-
-
-# 调试输出函数
-def print_formatted_info(info, show_debug_tip=False, info_about="DEBUG"):
-    if show_debug_tip:
-        cprint("-----" + info_about + "-----", "blue", attrs=['bold'])
-    if isinstance(info, dict):
-        for (k, v) in info.items():
-            print("%s =" % k, v)
-    elif isinstance(info, str):
-        cprint(info, attrs=["bold"])
-    else:
-        for each_info in info:
-            print(each_info)
-    if show_debug_tip:
-        cprint("----" + info_about + " ENDS----", "blue", attrs=['bold'])
 
 
 # 查询专业信息

@@ -1,6 +1,9 @@
 import pytz
-from icalendar import Calendar, Event
-from datetime import datetime
+import re
+from icalendar import Calendar, Event, Alarm
+from datetime import datetime, timedelta
+from config import load_config
+from predefine import get_time
 
 
 # .ics files should follow
@@ -19,31 +22,55 @@ def generate_ics(student_id, student_name, student_classes):
         for day in range(1, 8):
             if (day, time) in student_classes:
                 for every_class in student_classes[(day, time)]:
-                    cal.add_component(
-                        __add_event(every_class['name'], every_class['location'], every_class['teacher'], student_id))
+                    durations = re.findall(r'\d{1,2}-\d{1,2}', every_class['duration'])
+                    for each_duration in durations:
+                        dur_starting_week, dur_ending_week = re.split(r'-', each_duration)
+                        if every_class['week'] == '周':
+                            interval = 1
+                        else:
+                            interval = 2
+                        dtstart = __get_datetime(dur_starting_week, day, get_time(time)[0])
+                        dtend = __get_datetime(dur_starting_week, day, get_time(time)[1])
+                        until = __get_datetime(dur_ending_week, day, get_time(time)[1]) + timedelta(days=1)
+                        # 参数：课程名称、初次时间[start、end、interval、until、duration]、循环规则、地点、老师、学生 ID
+                        cal.add_component(
+                            __add_event(every_class['name'],
+                                        [dtstart, dtend, interval, until, each_duration, every_class['week']],
+                                        every_class['location'],
+                                        every_class['teacher'], student_id))
     # Write file
     import os
     with open(os.path.dirname(__file__) + '/ics/%s.ics' % student_id, 'w') as f:
         f.write(cal.to_ical().decode(encoding='utf-8'))
 
 
-def __add_event(name, location, teacher, student_id):
+# 输入周次，星期、时间tuple（时,分），输出datetime类型的时间
+def __get_datetime(week, day, time):
+    return datetime(*load_config().SEMESTER_STARTS, *time, tzinfo=pytz.timezone("Asia/Shanghai")) + timedelta(
+        days=(int(week) - 1) * 7 + (int(day) - 1))
+
+
+# Add event
+def __add_event(name, times, location, teacher, student_id):
     event = Event()
-    event.add('transp', 'opaque')
+    event.add('transp', 'transparent')
     summary = name
     if location != 'None':
         summary = name + '@' + location
-    description = ''
+        event.add('location', location)
+    description = times[4] + times[5]
     if teacher != 'None':
-        description = '教师：' + teacher + '\n'
+        description += '\n教师：' + teacher + '\n'
     description += '由 EveryClass (http://every.admirable.one) 导入'
     event.add('summary', summary)
-    event.add('location', location)
     event.add('description', description)
-    event.add('dtstart', datetime(2016, 3, 14, 8, 0, 0, tzinfo=pytz.timezone("Asia/Shanghai")))
-    event.add('dtend', datetime(2016, 3, 14, 8, 0, 0, tzinfo=pytz.timezone("Asia/Shanghai")))
-    event['uid'] = 'ec-CSU' + student_id + '@admirable.one'
-    event.add('rrule', {'freq': 'weekly', 'interval': '2',
-                        'until': datetime(2016, 3, 14, 8, 0, 0, tzinfo=pytz.timezone("Asia/Shanghai")), 'byday': 'MO',
-                        'wkst': 'SU'})
+    event.add('dtstart', times[0])
+    event.add('dtend', times[1])
+    event['uid'] = 'ec-CSU' + student_id + 't' + datetime.now().strftime('%y%m%d%H%M%S%f') + '@admirable.one'
+    event.add('rrule', {'freq': 'weekly', 'interval': times[2],
+                        'until': times[3]})
+    alarm = Alarm()
+    alarm.add('action', 'none')
+    alarm.add('trigger', datetime(1980, 1, 1, 3, 5, 0))
+    event.add_component(alarm)
     return event
