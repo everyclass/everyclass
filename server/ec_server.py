@@ -3,11 +3,10 @@ import json
 import os
 import re
 from config import load_config
-from predefine import get_day_chinese, get_time_chinese, faculty_lookup, is_chinese, print_formatted_info
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-    render_template, flash, escape, send_from_directory
+from predefine import get_day_chinese, get_time_chinese, faculty_lookup, is_chinese
+from flask import Flask, request, session, g, redirect, url_for, render_template, flash, escape, send_from_directory
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='static', static_url_path='')
 os.environ['MODE'] = 'DEVELOPMENT'
 app.config.from_object(load_config())
 
@@ -253,7 +252,7 @@ def generate_ics():
     if session['stu_id']:
         from generate_ics import generate_ics
         student_name, student_classes = get_classes_for_student(session['stu_id'])
-        generate_ics(session['stu_id'], student_name, student_classes, semester_to_string(semester(), simplify=True))
+        generate_ics(session['stu_id'], student_name, student_classes, semester_to_string(semester(), simplify=True),semester())
         return render_template('ics.html', student_id=session['stu_id'],
                                semester=semester_to_string(semester(), simplify=True))
     else:
@@ -297,19 +296,3 @@ def method_not_allowed(error):
 
 if __name__ == '__main__':
     app.run()
-    app.add_url_rule('/android-chrome-192x192.png',
-                     redirect_to=url_for('static', filename='android-chrome-192x192.png'))
-    app.add_url_rule('/android-chrome-512x512.png',
-                     redirect_to=url_for('static', filename='android-chrome-512x512.png'))
-    app.add_url_rule('/apple-touch-icon.png', redirect_to=url_for('static', filename='/images/apple-touch-icon.png'))
-    app.add_url_rule('/browserconfig.xml', redirect_to=url_for('static', filename='browserconfig.xml'))
-    app.add_url_rule('/favicon-16x16.png', redirect_to=url_for('static', filename='/images/favicon-16x16.png'))
-    app.add_url_rule('/favicon-32x32.png', redirect_to=url_for('static', filename='/images/favicon-32x32.png'))
-    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='/images/favicon.ico'))
-    app.add_url_rule('/manifest.json', redirect_to=url_for('static', filename='manifest.json'))
-    app.add_url_rule('/mstile-150x150.png', redirect_to=url_for('static', filename='/images/mstile-150x150.png'))
-    app.add_url_rule('/safari-pinned-tab.svg', redirect_to=url_for('static', filename='/images/safari-pinned-tab.svg'))
-    app.add_url_rule('/android-chrome-192x192.png',
-                     redirect_to=url_for('static', filename='/images/android-chrome-192x192.png'))
-    app.add_url_rule('/android-chrome-512x512.png',
-                     redirect_to=url_for('static', filename='/images/android-chrome-512x512.png'))

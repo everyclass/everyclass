@@ -8,7 +8,7 @@ from predefine import get_time
 
 # .ics files should follow
 # https://tools.ietf.org/html/rfc2445?cm_mc_uid=02098050116114871518159&cm_mc_sid_50200000=1493972416
-def generate_ics(student_id, student_name, student_classes, semester_string):
+def generate_ics(student_id, student_name, student_classes, semester_string, semester):
     # Create calender object
     cal = Calendar()
     cal.add('prodid', '-//Admirable//EveryClass 1.0//EN')
@@ -29,9 +29,9 @@ def generate_ics(student_id, student_name, student_classes, semester_string):
                             interval = 1
                         else:
                             interval = 2
-                        dtstart = __get_datetime(dur_starting_week, day, get_time(time)[0])
-                        dtend = __get_datetime(dur_starting_week, day, get_time(time)[1])
-                        until = __get_datetime(dur_ending_week, day, get_time(time)[1]) + timedelta(days=1)
+                        dtstart = __get_datetime(dur_starting_week, day, get_time(time)[0], semester)
+                        dtend = __get_datetime(dur_starting_week, day, get_time(time)[1], semester)
+                        until = __get_datetime(dur_ending_week, day, get_time(time)[1], semester) + timedelta(days=1)
                         # 参数：课程名称、初次时间[start、end、interval、until、duration]、循环规则、地点、老师、学生 ID
                         cal.add_component(
                             __add_event(every_class['name'],
@@ -45,9 +45,9 @@ def generate_ics(student_id, student_name, student_classes, semester_string):
 
 
 # 输入周次，星期、时间tuple（时,分），输出datetime类型的时间
-def __get_datetime(week, day, time):
-    return datetime(*load_config().SEMESTER_STARTS, *time, tzinfo=pytz.timezone("Asia/Shanghai")) + timedelta(
-        days=(int(week) - 1) * 7 + (int(day) - 1))
+def __get_datetime(week, day, time, semester):
+    return datetime(*load_config().AVAILABLE_SEMESTERS.get(semester)['start'], *time,
+                    tzinfo=pytz.timezone("Asia/Shanghai")) + timedelta(days=(int(week) - 1) * 7 + (int(day) - 1))
 
 
 # Add event
