@@ -30,6 +30,7 @@ def get_time_chinese(digit):
         return '第11-12节'
 
 
+# For generate_ics : get time for class
 def get_time(digit):
     if digit == 1:
         return [(8, 00), (9, 40)]

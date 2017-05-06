@@ -8,7 +8,7 @@ from predefine import get_time
 
 # .ics files should follow
 # https://tools.ietf.org/html/rfc2445?cm_mc_uid=02098050116114871518159&cm_mc_sid_50200000=1493972416
-def generate_ics(student_id, student_name, student_classes):
+def generate_ics(student_id, student_name, student_classes, semester_string):
     # Create calender object
     cal = Calendar()
     cal.add('prodid', '-//Admirable//EveryClass 1.0//EN')
@@ -40,7 +40,7 @@ def generate_ics(student_id, student_name, student_classes):
                                         every_class['teacher'], student_id))
     # Write file
     import os
-    with open(os.path.dirname(__file__) + '/ics/%s.ics' % student_id, 'w') as f:
+    with open(os.path.dirname(__file__) + '/ics/%s-%s.ics' % (student_id, semester_string), 'w') as f:
         f.write(cal.to_ical().decode(encoding='utf-8'))
 
 
@@ -66,7 +66,7 @@ def __add_event(name, times, location, teacher, student_id):
     event.add('description', description)
     event.add('dtstart', times[0])
     event.add('dtend', times[1])
-    event.add('last-modified',datetime.now())
+    event.add('last-modified', datetime.now())
     event['uid'] = 'ec-CSU' + student_id + 't' + datetime.now().strftime('%y%m%d%H%M%S%f') + '@admirable.one'
     event.add('rrule', {'freq': 'weekly', 'interval': times[2],
                         'until': times[3]})

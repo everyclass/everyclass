@@ -4,6 +4,15 @@ class Config(object):
     SECRET_KEY = 'development_key'
     SERVER_NAME = 'localhost'
 
+    # Semester and database settings
+    DATA_LAST_UPDATE_TIME = 'Apr. 29, 2017'  # 数据最后更新日期
+    DEFAULT_SEMESTER = (2016, 2017, 2)
+    AVAILABLE_SEMESTERS = {
+        (2016, 2017, 2): {
+            'start': (2017, 2, 20),
+        },
+    }
+
     # Database config
     MYSQL_CONFIG = {
         'user': 'database_user',
@@ -13,8 +22,3 @@ class Config(object):
         'database': 'everyclass',
         'raise_on_warnings': True,
     }
-
-    # Business
-    SEMESTER = '2016-2017-2'  # 当前学期
-    SEMESTER_STARTS = (2017, 2, 20)  # 学期开始日
-    DATA_LAST_UPDATE_TIME = 'Apr. 29, 2017'  # 数据最后更新日期

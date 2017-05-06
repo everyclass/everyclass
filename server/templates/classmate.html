@@ -2,8 +2,8 @@
 {% block title %}参加 {{ class_name }} 的同学 - EveryClass @ CSU{% endblock %}
 {% block body %}
     <div class="hero hero-homepage">
-        <h1 class="hero-header">参加 {{ class_name }} 的同学</h1>
-        <h4 class="text-muted">{{ class_day }}{{ class_time }}, {{ class_teacher }}</h4>
+        <h1 class="hero-header">参加{{ class_name }}的同学</h1>
+        <h4 class="text-muted">共{{ student_count }}人，{{ class_day }}{{ class_time }}，{{ class_teacher }}</h4>
         <h4 class="text-muted"><a href="{{ url_for('query') }}">返回我的课表</a></h4>
     </div>
     <br><br>

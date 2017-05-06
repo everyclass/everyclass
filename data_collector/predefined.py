@@ -23,13 +23,13 @@ def get_row_code(row_num):
         return '921723A66500482189BDEF39E4C87D61'
 
 
-# Function: get_semester_code_for_db
+# Function: semester_code
 # For tables like ec_students or ec_classes, each semesters will have their own
 # tables to reduce server pressure while querying. For example, the student table for second semester during 2016 and
 #  2017 will be "ec_students_16_17_2". This function transforms semester codes like "2016-2017-2" to table name type
 # like "16_17_2"
 # Usage:
-# Example: get_semester_code_for_db("2016-2017-2")
+# Example: semester_code("2016-2017-2")
 def get_semester_code_for_db(xq):
     if xq == '':
         import settings

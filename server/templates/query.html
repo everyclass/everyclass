@@ -3,6 +3,17 @@
 {% block body %}
     <div class="hero hero-homepage">
         <h1 class="hero-header">{{ name }}的课表</h1>
+
+        <form id="semester-choose-form" action="/query" method="post">
+            <select id="semester" name="semester">
+                {% for each_semester in available_semesters %}
+                    <option value="{{ each_semester[0] }}"
+                            {% if each_semester[1]==True %}selected{% endif %}>{{ each_semester[0] }}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+
         <h4 class="text-muted visible-xs">课表内容较多，建议登陆电脑使用哦。网址：<br><a href="http://every.admirable.one">http://every.admirable.one</a>
         </h4>
         <h4 class="text-muted"><a href="{{ url_for('generate_ics', id=stu_id) }}">导入到日历</a></h4>
@@ -40,7 +51,8 @@
                                                 {% if every_class['location']!='None' %}
                                                     ，{{ every_class['location'] }}
                                                 {% endif %}
-                                                <br><a href="{{ url_for('get_classmates',class_id=every_class['id']) }}">查看同学</a>
+                                                <br>
+                                                <a href="{{ url_for('get_classmates',class_id=every_class['id']) }}">查看同学</a>
                                                 <br>
                                             {% endfor %}
                                         </td>

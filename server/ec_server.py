@@ -20,14 +20,38 @@ class NoStudentException(ValueError):
     pass
 
 
-# 获取用于数据表命名的学期，输入2016-2017-2，输出16_17_2
-def get_semester_code_for_db(xq):
+# 获取用于数据表命名的学期，输入(2016,2017,2)，输出16_17_2
+def semester_code(xq):
     if xq == '':
-        return get_semester_code_for_db(app.config['SEMESTER'])
+        return semester_code(app.config['DEFAULT_SEMESTER'])
     else:
-        import re
-        splited = re.split('-', xq)
-        return str(splited[0][2:4] + "_" + splited[1][2:4] + "_" + splited[2])
+        if xq in app.config['AVAILABLE_SEMESTERS']:
+            return str(xq[0])[2:4] + "_" + str(xq[1])[2:4] + "_" + str(xq[2])
+
+
+# 输入str"2016-2017-2"，输出[2016,2017,2]，因为参数可能来自表单提交，需要判断有效性
+def semester_to_tuple(xq):
+    if re.match(r'\d{4}-\d{4}-\d{1}', xq):
+        splited = re.split(r'-', xq)
+        return int(splited[0]), int(splited[1]), int(splited[2])
+    else:
+        return app.config['DEFAULT_SEMESTER']
+
+
+# 因为to_string的参数一定来自程序内部，所以不检查有效性
+def semester_to_string(xq, simplify=False):
+    if not simplify:
+        return str(xq[0]) + '-' + str(xq[1]) + '-' + str(xq[2])
+    else:
+        return str(xq[0])[2:4] + '-' + str(xq[1])[2:4] + '-' + str(xq[2])
+
+
+# 获取当前学期，当 url 中没有显式表明 semester 时，不设置 session，而是在这里设置默认值
+def semester():
+    if session.get('semester', None) and session.get('semester') in app.config['AVAILABLE_SEMESTERS']:
+        return session['semester']
+    else:
+        return app.config['DEFAULT_SEMESTER']
 
 
 # 查询专业信息
@@ -77,8 +101,7 @@ def close_db(error):
 def get_classes_for_student(student_id):
     db = get_db()
     cursor = db.cursor()
-    mysql_query = "SELECT name,classes FROM ec_students_" + get_semester_code_for_db(
-        app.config['SEMESTER']) + " WHERE xh=%s"
+    mysql_query = "SELECT name,classes FROM ec_students_" + semester_code(semester()) + " WHERE xh=%s"
     cursor.execute(mysql_query, (student_id,))
     result = cursor.fetchall()
     if not result:
@@ -90,7 +113,7 @@ def get_classes_for_student(student_id):
         student_classes = dict()
         for classes in student_classes_list:
             mysql_query = "SELECT clsname,day,time,teacher,duration,week,location,id FROM ec_classes_" + \
-                          get_semester_code_for_db(app.config['SEMESTER']) + " WHERE id=%s"
+                          semester_code(semester()) + " WHERE id=%s"
             cursor.execute(mysql_query, (classes,))
             result = cursor.fetchall()
             if (result[0][1], result[0][2]) not in student_classes:
@@ -107,8 +130,8 @@ def get_classes_for_student(student_id):
 def get_students_in_class(class_id):
     db = get_db()
     cursor = db.cursor()
-    mysql_query = "SELECT students,clsname,day,time,teacher FROM ec_classes_" + get_semester_code_for_db(
-        app.config['SEMESTER']) + " WHERE id=%s"
+    mysql_query = "SELECT students,clsname,day,time,teacher FROM ec_classes_" + semester_code(
+        semester()) + " WHERE id=%s"
     cursor.execute(mysql_query, (class_id,))
     result = cursor.fetchall()
     if not result:
@@ -125,8 +148,7 @@ def get_students_in_class(class_id):
             cursor.close()
             raise NoStudentException
         for each_student in students:
-            mysql_query = "SELECT name FROM ec_students_" + get_semester_code_for_db(
-                app.config['SEMESTER']) + " WHERE xh=%s"
+            mysql_query = "SELECT name FROM ec_students_" + semester_code(semester()) + " WHERE xh=%s"
             cursor.execute(mysql_query, (each_student,))
             result = cursor.fetchall()
             # 信息包含姓名、学号、学院、专业、班级
@@ -158,13 +180,15 @@ def guide():
 # 用于查询本人课表
 @app.route('/query', methods=['GET', 'POST'])
 def query():
+    if request.values.get('semester'):
+        if semester_to_tuple(request.values.get('semester')) in app.config['AVAILABLE_SEMESTERS']:
+            session['semester'] = semester_to_tuple(request.values.get('semester'))
     if request.values.get('id'):  # 带有 id 参数（可为姓名或学号）
         id_or_name = request.values.get('id')
         if is_chinese(id_or_name[0:1]) and is_chinese(id_or_name[-1:]):  # 首末均为中文
             db = get_db()
             cursor = db.cursor()
-            mysql_query = "SELECT name,xh FROM ec_students_" + get_semester_code_for_db(
-                app.config['SEMESTER']) + " WHERE name=%s"
+            mysql_query = "SELECT name,xh FROM ec_students_" + semester_code(semester()) + " WHERE name=%s"
             cursor.execute(mysql_query, (id_or_name,))
             result = cursor.fetchall()
             if cursor.rowcount > 1:  # 查询到多个同名，进入选择界面
@@ -206,8 +230,16 @@ def query():
         for cls_day in range(1, 8):
             if (cls_day, 5) in student_classes:
                 empty_5 = False
+        # 学期选择器
+        available_semesters = []
+        for each_semester in app.config['AVAILABLE_SEMESTERS']:
+            if semester() == each_semester:
+                available_semesters.append([semester_to_string(each_semester), True])
+            else:
+                available_semesters.append([semester_to_string(each_semester), False])
         return render_template('query.html', name=student_name, stu_id=student_id, classes=student_classes,
-                               empty_wkend=empty_wkend, empty_6=empty_6, empty_5=empty_5)
+                               empty_wkend=empty_wkend, empty_6=empty_6, empty_5=empty_5,
+                               available_semesters=available_semesters)
 
 
 # 导出日历交换格式文件
@@ -215,18 +247,22 @@ def query():
 def generate_ics():
     if request.values.get('id'):
         session['stu_id'] = request.values.get('id')
+    if request.values.get('semester'):
+        if semester_to_tuple(request.values.get('semester')) in app.config['AVAILABLE_SEMESTERS']:
+            session['semester'] = semester_to_tuple(request.values.get('semester'))
     if session['stu_id']:
         from generate_ics import generate_ics
         student_name, student_classes = get_classes_for_student(session['stu_id'])
-        generate_ics(session['stu_id'], student_name, student_classes)
-        return render_template('ics.html', student_id=session['stu_id'])
+        generate_ics(session['stu_id'], student_name, student_classes, semester_to_string(semester(), simplify=True))
+        return render_template('ics.html', student_id=session['stu_id'],
+                               semester=semester_to_string(semester(), simplify=True))
     else:
         return redirect(url_for('main'))
 
 
-@app.route('/<student_id>.ics')
-def get_ics(student_id):
-    return send_from_directory("ics", student_id + ".ics")
+@app.route('/<student_id>-<semester>.ics')
+def get_ics(student_id, semester):
+    return send_from_directory("ics", student_id + "-" + semester + ".ics")
 
 
 # 同学名单
@@ -244,7 +280,7 @@ def get_classmates():
     else:
         return render_template('classmate.html', class_name=class_name, class_day=get_day_chinese(class_day),
                                class_time=get_time_chinese(class_time), class_teacher=class_teacher,
-                               students=students_info)
+                               students=students_info, student_count=len(students_info))
 
 
 # 404跳转回首页
