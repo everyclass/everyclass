@@ -170,6 +170,12 @@ def faq():
     return render_template('faq.html')
 
 
+# 关于
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 # 帮助
 @app.route('/guide')
 def guide():
