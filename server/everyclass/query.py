@@ -4,17 +4,16 @@
 from flask import Blueprint
 
 query_blueprint = Blueprint('query', __name__)
-from flask import request, render_template, flash, redirect, url_for, session, escape
-from flask import current_app as app
-from commons import is_chinese, semester_to_tuple, semester_code, NoStudentException, NoClassException, \
-    semester_to_string, class_lookup, get_day_chinese, get_time_chinese, faculty_lookup
-from ec_server import semester, get_db, major_lookup, get_classes_for_student, \
-    get_students_in_class
 
 
 # 用于查询本人课表
 @query_blueprint.route('/query', methods=['GET', 'POST'])
 def query():
+    from flask import request, render_template, flash, redirect, url_for, session, escape
+    from flask import current_app as app
+    from commons import is_chinese, semester_to_tuple, semester_code, NoStudentException, semester_to_string, \
+        class_lookup, faculty_lookup
+    from everyclass.mysql_operations import semester, get_db, major_lookup, get_classes_for_student
     if request.values.get('semester'):
         if semester_to_tuple(request.values.get('semester')) in app.config['AVAILABLE_SEMESTERS']:
             session['semester'] = semester_to_tuple(request.values.get('semester'))
@@ -72,7 +71,9 @@ def query():
                 available_semesters.append([semester_to_string(each_semester), True])
             else:
                 available_semesters.append([semester_to_string(each_semester), False])
-        return render_template('query.html', name=[student_name,faculty_lookup(student_id),major_lookup(student_id),class_lookup(student_id)], stu_id=student_id, classes=student_classes,
+        return render_template('query.html', name=[student_name, faculty_lookup(student_id), major_lookup(student_id),
+                                                   class_lookup(student_id)], stu_id=student_id,
+                               classes=student_classes,
                                empty_wkend=empty_wkend, empty_6=empty_6, empty_5=empty_5,
                                available_semesters=available_semesters)
 
@@ -80,6 +81,9 @@ def query():
 # 同学名单
 @query_blueprint.route('/classmates')
 def get_classmates():
+    from flask import request, render_template, flash, redirect, url_for
+    from commons import NoStudentException, NoClassException, get_day_chinese, get_time_chinese
+    from everyclass.mysql_operations import get_students_in_class
     try:
         class_name, class_day, class_time, class_teacher, students_info = get_students_in_class(
             request.values.get('class_id', None))

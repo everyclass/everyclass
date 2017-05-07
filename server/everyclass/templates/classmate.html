@@ -4,7 +4,7 @@
     <div class="hero hero-homepage">
         <h1 class="hero-header">参加{{ class_name }}的同学</h1>
         <h4 class="text-muted">共{{ student_count }}人，{{ class_day }}{{ class_time }}，{{ class_teacher }}</h4>
-        <h4 class="text-muted"><a href="{{ url_for('query') }}">返回我的课表</a></h4>
+        <h4 class="text-muted"><a href="{{ url_for('query.query') }}">返回我的课表</a></h4>
     </div>
     <br><br>
     <div class="row row-backbordered">
@@ -28,7 +28,7 @@
                                 <td>{{ each_student[1] }}</td>
                                 <td>{{ each_student[2] }}</td>
                                 <td>{{ each_student[3] }} {{ each_student[4] }}</td>
-                                <td><a href="{{ url_for('query', id=each_student[1]) }}">查看课表</a></td>
+                                <td><a href="{{ url_for('query.query', id=each_student[1]) }}">查看课表</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>

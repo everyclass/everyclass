@@ -2,6 +2,7 @@ appdirs==1.4.3
 beautifulsoup4==4.5.3
 click==6.7
 Flask==0.12.1
+Flask-Script==2.0.5
 -e git+https://github.com/pallets/flask.git@39d55525ac8f674b40be5d1d3160b9fd33ce501a#egg=flaskr&subdirectory=examples/flaskr
 icalendar==3.11.3
 itsdangerous==0.24

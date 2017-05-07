@@ -1,5 +1,6 @@
 class Config(object):
     # App basic config
+    CONFIG_NAME = 'default'
     DEBUG = True
     SECRET_KEY = 'development_key'
     SERVER_NAME = 'localhost'
