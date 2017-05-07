@@ -72,7 +72,7 @@ def query():
                 available_semesters.append([semester_to_string(each_semester), True])
             else:
                 available_semesters.append([semester_to_string(each_semester), False])
-        return render_template('query.html', name=student_name, stu_id=student_id, classes=student_classes,
+        return render_template('query.html', name=[student_name,faculty_lookup(student_id),major_lookup(student_id),class_lookup(student_id)], stu_id=student_id, classes=student_classes,
                                empty_wkend=empty_wkend, empty_6=empty_6, empty_5=empty_5,
                                available_semesters=available_semesters)
 

@@ -1,2 +1,4 @@
 config/development.py
 config/production.py
+data_collector/raw_data
+data_collector/test_data
