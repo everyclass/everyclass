@@ -63,6 +63,7 @@
 <br><br>
 
 <footer class="footer clearfix footer-borderless">
+    <p style="display: none; color: #c9a535" id="wechat-browser-tip">你正在使用微信浏览器，请使用自带浏览器打开↗</p>
     数据更新时间：{{ config.DATA_LAST_UPDATE_TIME }}<br>
     EveryClass 是一个 <a href="https://github.com/fr0der1c/EveryClass_CSU" target="_blank">开源项目</a>，你可以帮助我们做得更好。
 
@@ -83,13 +84,19 @@
 </footer>
 
 
-<script src="../static/jquery_1.11.0_min.js" type="text/javascript"></script>
-<script src="../static/bootstrap.min.js" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='jquery_1.11.0_min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='bootstrap.min.js') }}" type="text/javascript"></script>
 <script>
     $("select#semester").change(function () {
         $("form#semester-choose-form").submit();
-        console.log($(this).val());
     });
+    $(document).ready(function () {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            $("#wechat-browser-tip").css('display','block');
+        }
+    })
 </script>
+
 </body>
 </html>

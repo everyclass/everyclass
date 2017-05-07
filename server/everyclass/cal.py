@@ -18,7 +18,7 @@ def generate_ics():
     if request.values.get('semester'):
         if semester_to_tuple(request.values.get('semester')) in app.config['AVAILABLE_SEMESTERS']:
             session['semester'] = semester_to_tuple(request.values.get('semester'))
-    if session['stu_id']:
+    if session.get('stu_id', None):
         from generate_ics import generate_ics
         student_name, student_classes = get_classes_for_student(session['stu_id'])
         generate_ics(session['stu_id'], student_name, student_classes, semester_to_string(semester(), simplify=True),

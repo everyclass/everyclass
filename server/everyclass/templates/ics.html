@@ -14,9 +14,8 @@
                     href="https://www.dida365.com/" target="_blank">滴答清单</a> 等强大好用的 App 的配合，你会发现自己可以把每天过的井井有条。<br>如果你的系统日历跟其他地方（如
                 Google Calendar）设置了云同步，那么每一处都可以有你的课表，从此再也不用超级课程表、课程格子等单独的课程表 App 了。
             </p>
-            <p class="p1"><span class="s1"><b>该功能支持哪些设备？<br></b></span>iCalendar
-                是通用的日历交换格式，原则上是支持所有设备（包括iOS、安卓、Mac...）的。<br>如果你使用安卓手机，可能无法点击上方链接直接订阅，请复制{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True) }}，然后在系统设置或自带日历 App中仔细寻找类似“订阅日历”、“导入 ics
-                文件”之类的选项；<br>如果你希望课表在所有苹果设备上自动同步，需要通过 Mac 端的日历 App 来设置（iOS 只能订阅日历到当前设备）。
+            <p class="p1"><span class="s1"><b>该功能支持哪些设备？<br></b></span>iCalendar(WebCal)
+                是通用的日历交换格式，原则上是支持所有设备（包括iOS、安卓、Mac...）的。<br>如果你使用安卓手机，可能无法点击上方链接直接订阅，请复制<a href="{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True) }}">{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True) }}</a>，然后在系统设置或自带日历 App中仔细寻找类似“订阅日历”、“导入 ics文件”之类的选项；<br>如果你希望课表在所有苹果设备上自动同步，需要通过 Mac 端的日历 App 来设置（iOS 只能订阅日历到当前设备）。
             </p>
         </div>
     </div>

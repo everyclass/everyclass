@@ -41,6 +41,10 @@ def create_app():
     def guide():
         return render_template('guide.html')
 
+    @app.route('/guide/howto')
+    def guide_howto():
+        return render_template('guide_howto.html')
+
     @app.route('/<student_id>-<semester>.ics')
     def get_ics(student_id, semester):
         return send_from_directory("ics", student_id + "-" + semester + ".ics")

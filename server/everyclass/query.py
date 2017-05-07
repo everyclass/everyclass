@@ -39,7 +39,7 @@ def query():
         else:  # id 为学号
             student_id = request.values.get('id')
         session['stu_id'] = student_id
-    elif session.get(['stu_id'], None):
+    elif session.get('stu_id', None):
         student_id = session['stu_id']
     else:
         return redirect(url_for('main'))
