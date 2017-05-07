@@ -3,7 +3,7 @@ import re
 from icalendar import Calendar, Event, Alarm
 from datetime import datetime, timedelta
 from config import load_config
-from predefine import get_time
+from commons import get_time
 
 
 # .ics files should follow

@@ -16,7 +16,7 @@
 
         <h4 class="text-muted visible-xs">课表内容较多，建议登陆电脑使用哦。网址：<br><a href="http://every.admirable.one">http://every.admirable.one</a>
         </h4>
-        <h4 class="text-muted"><a href="{{ url_for('generate_ics', id=stu_id) }}">导入到日历</a></h4>
+        <h4 class="text-muted"><a href="{{ url_for('cal.generate_ics', id=stu_id) }}">导入到日历</a></h4>
     </div>
     <br><br>
     <div class="row row-backbordered">
@@ -52,7 +52,7 @@
                                                     ，{{ every_class['location'] }}
                                                 {% endif %}
                                                 <br>
-                                                <a href="{{ url_for('get_classmates',class_id=every_class['id']) }}">查看同学</a>
+                                                <a href="{{ url_for('query.get_classmates',class_id=every_class['id']) }}">查看同学</a>
                                                 <br>
                                             {% endfor %}
                                         </td>
