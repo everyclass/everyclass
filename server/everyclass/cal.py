@@ -7,7 +7,7 @@ cal_blueprint = Blueprint('cal', __name__)
 from flask import request, session, redirect, url_for, render_template
 from flask import current_app as app
 from everyclass.commons import semester_to_string, semester_to_tuple
-from mysql_operations import get_classes_for_student, semester
+from everyclass.mysql_operations import get_classes_for_student, semester
 
 
 # 导出日历交换格式文件

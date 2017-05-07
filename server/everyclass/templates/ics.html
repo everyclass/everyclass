@@ -4,10 +4,10 @@
     <h1 class="rte-heading text-center">导出课表到日历</h1>
     <div class="row">
         <div class="rte col-md-offset-2 col-md-8 col-sm-12 col-sm-offset-0">
-            <h4 class="p1">你的 iCal
+            <h4 class="p1">你的 WebCal
                 日历交换文件地址为：{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True) }}<br>
                 <a href="webcal://{{ config.SERVER_NAME }}{{ url_for('get_ics', student_id=student_id,semester=semester) }}">点击添加到日历</a><br><br>
-                如果你在使用微信等 App 内置浏览器，你可能需要选择用浏览器打开↗️
+                如果你在使用微信等 App 内置浏览器，你需要选择用浏览器打开↗<br>部分安卓手机可能点击之后没有反应，请看下方⤵解决方案️
             </h4>
 
             <p class="p1"><span class="s1"><b>把课表添加到日历有什么用？<br></b></span>把课表添加到日历能让你在同一处集中管理每日课表和其他日程，同时，借助 <a
@@ -15,8 +15,8 @@
                 Google Calendar）设置了云同步，那么每一处都可以有你的课表，从此再也不用超级课程表、课程格子等单独的课程表 App 了。
             </p>
             <p class="p1"><span class="s1"><b>该功能支持哪些设备？<br></b></span>iCalendar
-                是通用的日历交换格式，原则上是支持所有设备（包括iOS、安卓、Mac...）的。<br>如果你使用安卓手机，或许需要在系统设置或自带日历 App中仔细寻找类似“导入日历”、“导入 ics
-                文件”之类的选项；如果你希望课表在所有苹果设备上自动同步，可能必须通过 Mac 端的日历 App 来设置（iOS 只能订阅日历到当前设备）。
+                是通用的日历交换格式，原则上是支持所有设备（包括iOS、安卓、Mac...）的。<br>如果你使用安卓手机，可能无法点击上方链接直接订阅，请复制{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True) }}，然后在系统设置或自带日历 App中仔细寻找类似“订阅日历”、“导入 ics
+                文件”之类的选项；<br>如果你希望课表在所有苹果设备上自动同步，需要通过 Mac 端的日历 App 来设置（iOS 只能订阅日历到当前设备）。
             </p>
         </div>
     </div>
