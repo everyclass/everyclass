@@ -12,9 +12,8 @@ Notice that this project is still under development, please DO NOT FORK this rep
 
 ## Our latest progress 最新进度
 
-#### May 5
-- 网站前后端基本完成
-- 完成 .ics 文件生成模块
+#### May 7
+- 完成蓝图重构
 
 #### Next step
 - 收集学号前缀和专业对应关系信息
