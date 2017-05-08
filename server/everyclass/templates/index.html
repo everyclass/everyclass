@@ -19,11 +19,11 @@
                     <div class="col-lg-6 col-xs-12">
                         <div class="panel-content">
                             <div class="panel-actions">
-                                <form class="form-inline pull-right" action="{{ url_for('query.query') }}" method="post" id="search-form">
+                                <form class="form-inline pull-right" action="{{ url_for('query.query') }}" method="post" id="search-form" onsubmit="_czc.push(['_trackEvent', '首页', '查询', '桌面端']);">
                                     <input class="form-control input-lg panel-email-input" name="id"
                                            placeholder="学号或姓名" style="display: inline-block">
                                     <input type="submit" value="开始" name="开始" class="btn btn-lg"
-                                           style="display: inline-block" id="search-button" onclick="_czc.push(['_trackEvent', '首页', '查询', '桌面端']);">
+                                           style="display: inline-block" id="search-button">
                                 </form>
                             </div>
                         </div>
@@ -37,11 +37,11 @@
     <div class="col-xs-10 col-xs-offset-1 visible-xs">
         <div class="panel-content">
             <div class="panel-actions">
-                <form class="form-inline centre" action="{{ url_for('query.query') }}" method="post" id="mobile-search-form">
+                <form class="form-inline centre" action="{{ url_for('query.query') }}" method="post" id="mobile-search-form" onsubmit="_czc.push(['_trackEvent', '首页', '查询', '手机端']);">
                     <div class="input-group">
                         <input type="text" name="id" class="form-control" placeholder="学号或姓名">
                         <span class="input-group-btn">
-						<button class="btn btn-default" type="submit" value="开始" name="开始" onclick="_czc.push(['_trackEvent', '首页', '查询', '手机端']);">开始</button>
+						<button class="btn btn-default" type="submit" value="开始" name="开始">开始</button>
 					</span>
                     </div>
                 </form>

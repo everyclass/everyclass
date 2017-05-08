@@ -68,7 +68,7 @@
 <footer class="footer clearfix footer-borderless">
     <p style="display: none; color: #c9a535" id="wechat-browser-tip">你正在使用微信浏览器，请使用自带浏览器打开↗</p>
     数据更新时间：{{ config.DATA_LAST_UPDATE_TIME }}<br>
-    EveryClass 是一个 <a href="https://github.com/fr0der1c/EveryClass_CSU" target="_blank">开源项目</a>，你可以帮助我们做得更好。
+    EveryClass 是一个 <a href="https://github.com/fr0der1c/EveryClass" target="_blank">开源项目</a>，你可以帮助我们做得更好。
 
     <ul class="footer-list">
         <li class="footer-list-item">
@@ -96,14 +96,13 @@
     $(document).ready(function () {
         var ua = window.navigator.userAgent.toLowerCase();
         if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-            $("#wechat-browser-tip").css('display','block');
+            $("#wechat-browser-tip").css('display', 'block');
         }
     })
 
 </script>
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1261874903'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1261874903' type='text/javascript'%3E%3C/script%3E"));
-</script>
+<div style="display: none">
+    <script src="https://s11.cnzz.com/z_stat.php?id=1261874903&web_id=1261874903" language="JavaScript"></script>
+</div>
 </body>
 </html>
