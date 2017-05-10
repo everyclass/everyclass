@@ -34,8 +34,7 @@ def query():
             elif cursor.rowcount == 1:  # 仅能查询到一个人，则赋值学号
                 student_id = result[0][1]
             else:
-                flash("没有这个名字的学生哦")
-                return redirect(url_for('main'))
+                raise NoStudentException
         else:  # id 为学号
             student_id = request.values.get('id')
         session['stu_id'] = student_id

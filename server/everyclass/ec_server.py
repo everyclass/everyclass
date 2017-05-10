@@ -41,10 +41,6 @@ def create_app():
     def guide():
         return render_template('guide.html')
 
-    @app.route('/guide/howto')
-    def guide_howto():
-        return render_template('guide_howto.html')
-
     @app.route('/<student_id>-<semester>.ics')
     def get_ics(student_id, semester):
         return send_from_directory("ics", student_id + "-" + semester + ".ics", as_attachment=True, mimetype='text/calendar')
@@ -61,7 +57,7 @@ def create_app():
 
     @app.errorhandler(NoStudentException)
     def invalid_usage(error):
-        flash('没有这个学生哦')
+        flash('没有这个学生哦，是不是输错了？')
         return redirect(url_for('main'))
 
     @app.errorhandler(NoClassException)

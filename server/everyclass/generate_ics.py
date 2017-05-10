@@ -22,9 +22,14 @@ def generate_ics(student_id, student_name, student_classes, semester_string, sem
         for day in range(1, 8):
             if (day, time) in student_classes:
                 for every_class in student_classes[(day, time)]:
-                    durations = re.findall(r'\d{1,2}-\d{1,2}', every_class['duration'])
+                    # 每一节课
+                    durations = re.split(r',', every_class['duration'])
                     for each_duration in durations:
-                        dur_starting_week, dur_ending_week = re.split(r'-', each_duration)
+                        # 每一段上课周
+                        if len(re.findall(r'\d{1,2}', each_duration)) == 1:  # 仅当周
+                            dur_starting_week = dur_ending_week = re.findall(r'\d{1,2}', each_duration)[0]
+                        else:  # X 到 X 周
+                            dur_starting_week, dur_ending_week = re.findall(r'\d{1,2}', each_duration)
                         if every_class['week'] == '周':
                             interval = 1
                         else:
