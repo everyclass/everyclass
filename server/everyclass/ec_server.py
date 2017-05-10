@@ -1,4 +1,4 @@
-from flask import Flask, g, redirect, url_for, render_template, send_from_directory, flash
+from flask import Flask, g, redirect, url_for, render_template, send_from_directory, flash, escape
 
 from everyclass.cal import cal_blueprint
 from everyclass.config import load_config
@@ -43,7 +43,8 @@ def create_app():
 
     @app.route('/<student_id>-<semester>.ics')
     def get_ics(student_id, semester):
-        return send_from_directory("ics", student_id + "-" + semester + ".ics", as_attachment=True, mimetype='text/calendar')
+        return send_from_directory("ics", student_id + "-" + semester + ".ics", as_attachment=True,
+                                   mimetype='text/calendar')
 
     # 404跳转回首页
     @app.errorhandler(404)
@@ -57,7 +58,7 @@ def create_app():
 
     @app.errorhandler(NoStudentException)
     def invalid_usage(error):
-        flash('没有这个学生哦，是不是输错了？')
+        flash('没有在数据库中找到你哦。是不是输错了？你刚刚输入的是%s' % escape(error))
         return redirect(url_for('main'))
 
     @app.errorhandler(NoClassException)

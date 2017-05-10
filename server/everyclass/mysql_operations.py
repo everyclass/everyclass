@@ -42,7 +42,7 @@ def get_classes_for_student(student_id):
     result = cursor.fetchall()
     if not result:
         cursor.close()
-        raise NoStudentException
+        raise NoStudentException(student_id)
     else:
         student_name = result[0][0]
         student_classes_list = json.loads(result[0][1])

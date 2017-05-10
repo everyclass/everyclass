@@ -1,7 +1,7 @@
 """
 查询相关函数
 """
-from flask import Blueprint
+from flask import Blueprint, flash
 
 query_blueprint = Blueprint('query', __name__)
 
@@ -34,7 +34,8 @@ def query():
             elif cursor.rowcount == 1:  # 仅能查询到一个人，则赋值学号
                 student_id = result[0][1]
             else:
-                raise NoStudentException
+                no_student_handle(id_or_name)
+                return redirect(url_for('main'))
         else:  # id 为学号
             student_id = request.values.get('id')
         session['stu_id'] = student_id
@@ -45,8 +46,7 @@ def query():
     try:
         student_name, student_classes = get_classes_for_student(student_id)
     except NoStudentException:
-        flash('对不起，没有在数据库中找到你哦。学号是不是输错了？你刚刚输入的是%s' % escape(student_id))
-        return redirect(url_for('main'))
+        pass
     else:
         # 空闲周末判断，考虑到大多数人周末都是没有课程的
         empty_wkend = True
@@ -80,19 +80,16 @@ def query():
 # 同学名单
 @query_blueprint.route('/classmates')
 def get_classmates():
-    from flask import request, render_template, flash, redirect, url_for
-    from commons import NoStudentException, NoClassException, get_day_chinese, get_time_chinese
+    from flask import request, render_template
+    from commons import get_day_chinese, get_time_chinese
     from everyclass.mysql_operations import get_students_in_class
-    try:
-        class_name, class_day, class_time, class_teacher, students_info = get_students_in_class(
-            request.values.get('class_id', None))
-    except NoClassException as e:
-        flash('没有这门课程:%s' % (e,))
-        return redirect(url_for('main'))
-    except NoStudentException:
-        flash('这门课程没有学生')
-        return redirect(url_for('main'))
-    else:
-        return render_template('classmate.html', class_name=class_name, class_day=get_day_chinese(class_day),
-                               class_time=get_time_chinese(class_time), class_teacher=class_teacher,
-                               students=students_info, student_count=len(students_info))
+    class_name, class_day, class_time, class_teacher, students_info = get_students_in_class(
+        request.values.get('class_id', None))
+    return render_template('classmate.html', class_name=class_name, class_day=get_day_chinese(class_day),
+                           class_time=get_time_chinese(class_time), class_teacher=class_teacher,
+                           students=students_info, student_count=len(students_info))
+
+
+def no_student_handle(id):
+    from flask import escape
+    flash('没有在数据库中找到你哦。是不是输错了？你刚刚输入的是%s' % escape(id))
