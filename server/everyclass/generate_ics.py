@@ -34,6 +34,10 @@ def generate_ics(student_id, student_name, student_classes, semester_string, sem
                             interval = 1
                         else:
                             interval = 2
+                        if every_class['week'] == '双周' and int(dur_starting_week) % 2 != 0:
+                            dur_starting_week += str(int(dur_starting_week)+1)
+                        if every_class['week'] == '单周' and int(dur_starting_week) % 2 == 0:
+                            dur_starting_week += str(int(dur_starting_week)+1)
                         dtstart = __get_datetime(dur_starting_week, day, get_time(time)[0], semester)
                         dtend = __get_datetime(dur_starting_week, day, get_time(time)[1], semester)
                         until = __get_datetime(dur_ending_week, day, get_time(time)[1], semester) + timedelta(days=1)
