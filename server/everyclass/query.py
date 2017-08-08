@@ -83,11 +83,15 @@ def get_classmates():
     from flask import request, render_template
     from commons import get_day_chinese, get_time_chinese
     from everyclass.mysql_operations import get_students_in_class
+    if request.values.get('show_id') and request.values.get('show_id')=='true':
+        show_id = True
+    else:
+        show_id = False
     class_name, class_day, class_time, class_teacher, students_info = get_students_in_class(
         request.values.get('class_id', None))
     return render_template('classmate.html', class_name=class_name, class_day=get_day_chinese(class_day),
                            class_time=get_time_chinese(class_time), class_teacher=class_teacher,
-                           students=students_info, student_count=len(students_info))
+                           students=students_info, student_count=len(students_info),show_id=show_id)
 
 
 def no_student_handle(id):
