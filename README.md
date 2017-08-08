@@ -3,7 +3,7 @@
 
 *To run this python programme, please use Python 3.5.0 or 3.6.0*
 
-## Our latest progress 最新进度
+## Latest progress 最新进度
 
 #### May 8
 - 主体功能完成
