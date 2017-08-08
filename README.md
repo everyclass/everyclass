@@ -5,11 +5,12 @@
 
 ## Latest progress 最新进度
 
-#### May 8
+#### May 8, 2017
 - 主体功能完成
 
 #### Next step
-- 继续收集学号前缀和专业对应关系信息
+- Keep collecting relationshop between prefixes of student ID and their major /继续收集学号前缀和专业对应关系信息
+- Add some statistics function
 
 
 ----
