@@ -3,7 +3,7 @@ class Config(object):
     CONFIG_NAME = 'default'
     DEBUG = True
     SECRET_KEY = 'development_key'
-    SERVER_NAME = 'localhost'
+    #SERVER_NAME = 'localhost'
     CDN_DOMAIN = 'cdn.domain.com'
     CDN_ENDPOINTS = ['images','static']
     CDN_TIMESTAMP = False
