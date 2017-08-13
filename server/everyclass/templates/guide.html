@@ -9,20 +9,20 @@
             </p>
             <p class="p1"><span class="s1"><b>首页<br></b></span>
             </p>
-            <p align="center"><img src="images/screenshot1.jpg" height="500"></p>
+            <p align="center"><img src="{{ url_for('static', filename='images/screenshot1.jpg') }}" height="500"></p>
             <p class="p1">如你所见，这是 EveryClass 的首页。你可以输入学号或者姓名，然后点击开始按钮。有重名？别担心，我们已经处理好了这个问题。
             </p>
 
             <p class="p1"><span class="s1"><b>课表页面<br></b></span>
             </p>
-            <p align="center"><img src="images/screenshot2.jpg" width="550" class="img-responsive"></p>
+            <p align="center"><img src="{{ url_for('static', filename='images/screenshot2.jpg') }}" width="550" class="img-responsive"></p>
             <p class="p1">课表界面会显示你所有周的课表，甚至包括没有录入到教务系统的英语约课。你可以在上方选择你想查询的学期（EveryClass 从2016年下学期开始运行）。<br>
                 因为手机屏幕过于狭窄，不便于显示完整课表，建议你在电脑端访问。
             </p>
 
             <p class="p1"><span class="s1"><b>查看同学<br></b></span>
             </p>
-            <p align="center"><img src="images/screenshot3.jpg" width="550" class="img-responsive"></p>
+            <p align="center"><img src="{{ url_for('static', filename='images/screenshot3.jpg') }}" width="550" class="img-responsive"></p>
             <p class="p1">对于课表页面的每一节课，你可以点击"查看同学"链接，然后我们会列出所有参加这门课程的同学信息，包括姓名、学院、专业、班级。（因为是通过学号判断的，转专业的同学查询到的仍然是入学时候的专业）<br>
                 你也可以点击每个人最右边的"查询课表"链接，查询他的课表，就像你查询自己的课表一样。<br>
                 请注意，我们没有使用任何"不干净"的手段获取这些信息。
@@ -30,12 +30,12 @@
 
             <p class="p1"><span class="s1"><b>导出课表<br></b></span>
             </p>
-            <p align="center"><img src="images/screenshot4.jpg" height="500"></p>
+            <p align="center"><img src="{{ url_for('static', filename='images/screenshot4.jpg') }}" height="500"></p>
             <p class="p1">这是一个非常有用的功能，也是 EveryClass 最初存在的理由。<br>
                 把课表导出到系统日历能让你在同一个地方管理每天的所有日程，而不需要打开单独的课表 App。借助 <a
                         href="https://www.dida365.com/" target="_blank">滴答清单</a> 等强大好用的 App 的配合，你会发现自己你的每一天可以过得更加井井有条。
             </p>
-            <p align="center"><img src="images/screenshot5.jpg" height="500"></p>
+            <p align="center"><img src="{{ url_for('static', filename='images/screenshot5.jpg') }}" height="500"></p>
 
             <p class="p1">iOS 和 Mac 均对日历订阅有良好的原生支持，你可以通过"设置→日历→账户"管理已订阅的日历或添加新日历订阅。
             </p>

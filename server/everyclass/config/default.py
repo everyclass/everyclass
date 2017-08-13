@@ -5,6 +5,9 @@ class Config(object):
     SECRET_KEY = 'development_key'
     SERVER_NAME = 'localhost'
     CDN_DOMAIN = 'cdn.domain.com'
+    CDN_ENDPOINTS = ['images','static']
+    CDN_TIMESTAMP = False
+
 
 
     # Semester and database settings

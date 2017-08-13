@@ -1,5 +1,5 @@
 from flask import Flask, g, redirect, url_for, render_template, send_from_directory, flash, escape
-from flask.ext.cdn import CDN
+from flask_cdn import CDN
 from everyclass.cal import cal_blueprint
 from everyclass.config import load_config
 from everyclass.query import query_blueprint
@@ -8,9 +8,9 @@ from everyclass.commons import NoClassException, NoStudentException
 
 def create_app():
     app = Flask(__name__, static_folder='static', static_url_path='')
+    app.config.from_object(load_config())
     cdn = CDN()
     cdn.init_app(app)
-    app.config.from_object(load_config())
     app.register_blueprint(cal_blueprint)
     app.register_blueprint(query_blueprint)
     print('running under %s config' % app.config['CONFIG_NAME'])
