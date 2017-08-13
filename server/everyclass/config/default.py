@@ -4,6 +4,8 @@ class Config(object):
     DEBUG = True
     SECRET_KEY = 'development_key'
     SERVER_NAME = 'localhost'
+    CDN_DOMAIN = 'cdn.domain.com'
+
 
     # Semester and database settings
     DATA_LAST_UPDATE_TIME = 'Apr. 29, 2017'  # 数据最后更新日期
