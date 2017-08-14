@@ -45,6 +45,11 @@ def create_app():
     def guide():
         return render_template('guide.html')
 
+    # 测试
+    @app.route('/testing')
+    def testing():
+        return render_template('testing.html')
+
     @app.route('/<student_id>-<semester>.ics')
     def get_ics(student_id, semester):
         return send_from_directory("ics", student_id + "-" + semester + ".ics", as_attachment=True,
@@ -69,6 +74,13 @@ def create_app():
     def invalid_usage(error):
         flash('没有这门课程哦')
         return redirect(url_for('main'))
+
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return render_template('500.html',
+                               event_id=g.sentry_event_id,
+                               public_dsn=sentry.client.get_public_dsn('https')
+                               )
 
     return app
 
