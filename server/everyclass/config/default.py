@@ -7,6 +7,9 @@ class Config(object):
     CDN_DOMAIN = 'cdn.domain.com'
     CDN_ENDPOINTS = ['images','static']
     CDN_TIMESTAMP = False
+    SENTRY_CONFIG = {
+        'dsn': 'https://XXX@sentry.io/project',
+    }
 
 
 

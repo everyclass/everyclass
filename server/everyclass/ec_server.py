@@ -1,5 +1,6 @@
 from flask import Flask, g, redirect, url_for, render_template, send_from_directory, flash, escape
 from flask_cdn import CDN
+from raven.contrib.flask import Sentry
 from everyclass.cal import cal_blueprint
 from everyclass.config import load_config
 from everyclass.query import query_blueprint
@@ -11,6 +12,7 @@ def create_app():
     app.config.from_object(load_config())
     cdn = CDN()
     cdn.init_app(app)
+    sentry = Sentry(app)
     app.register_blueprint(cal_blueprint)
     app.register_blueprint(query_blueprint)
     print('running under %s config' % app.config['CONFIG_NAME'])
