@@ -3,15 +3,13 @@ class Config(object):
     CONFIG_NAME = 'default'
     DEBUG = True
     SECRET_KEY = 'development_key'
-    #SERVER_NAME = 'localhost'
+    # SERVER_NAME = 'localhost'
     CDN_DOMAIN = 'cdn.domain.com'
-    CDN_ENDPOINTS = ['images','static']
+    CDN_ENDPOINTS = ['images', 'static']
     CDN_TIMESTAMP = False
     SENTRY_CONFIG = {
         'dsn': 'https://XXX@sentry.io/project',
     }
-
-
 
     # Semester and database settings
     DATA_LAST_UPDATE_TIME = 'Apr. 29, 2017'  # 数据最后更新日期

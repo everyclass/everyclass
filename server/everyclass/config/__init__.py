@@ -10,6 +10,6 @@ def load_config():
         else:
             from everyclass.config.development import DevelopmentConfig
             return DevelopmentConfig
-    except ImportError as e:
+    except ImportError:
         from everyclass.config.default import Config
         return Config

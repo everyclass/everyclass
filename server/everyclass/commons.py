@@ -5,7 +5,7 @@ config = load_config()
 
 # 输入str"2016-2017-2"，输出[2016,2017,2]，因为参数可能来自表单提交，需要判断有效性
 def semester_to_tuple(xq):
-    if re.match(r'\d{4}-\d{4}-\d{1}', xq):
+    if re.match(r'\d{4}-\d{4}-\d', xq):
         splited = re.split(r'-', xq)
         return int(splited[0]), int(splited[1]), int(splited[2])
     else:

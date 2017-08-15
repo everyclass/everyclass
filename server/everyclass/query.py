@@ -9,7 +9,7 @@ query_blueprint = Blueprint('query', __name__)
 # 用于查询本人课表
 @query_blueprint.route('/query', methods=['GET', 'POST'])
 def query():
-    from flask import request, render_template, flash, redirect, url_for, session, escape
+    from flask import request, render_template, redirect, url_for, session, escape
     from flask import current_app as app
     from commons import is_chinese, semester_to_tuple, semester_code, NoStudentException, semester_to_string, \
         class_lookup, faculty_lookup
@@ -83,7 +83,7 @@ def get_classmates():
     from flask import request, render_template
     from commons import get_day_chinese, get_time_chinese
     from everyclass.mysql_operations import get_students_in_class
-    if request.values.get('show_id') and request.values.get('show_id')=='true':
+    if request.values.get('show_id') and request.values.get('show_id') == 'true':
         show_id = True
     else:
         show_id = False
@@ -91,9 +91,9 @@ def get_classmates():
         request.values.get('class_id', None))
     return render_template('classmate.html', class_name=class_name, class_day=get_day_chinese(class_day),
                            class_time=get_time_chinese(class_time), class_teacher=class_teacher,
-                           students=students_info, student_count=len(students_info),show_id=show_id)
+                           students=students_info, student_count=len(students_info), show_id=show_id)
 
 
-def no_student_handle(id):
+def no_student_handle(stu_identifier):
     from flask import escape
-    flash('没有在数据库中找到你哦。是不是输错了？你刚刚输入的是%s' % escape(id))
+    flash('没有在数据库中找到你哦。是不是输错了？你刚刚输入的是%s' % escape(stu_identifier))
