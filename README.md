@@ -1,15 +1,18 @@
 ## EveryClass @ CSU - A tool to import your classes to calendar on your phone and know who're taking same classes with you
 每课 @ CSU - 一个能将你的课表导入手机、电脑的日历，并查询跟你上同一节课的人的工具
 
-*To run this python programme, please use Python 3.5.0 or 3.6.0*
+*To run this python programme, please use Python 3.6.0*
 
 ## Latest progress 最新进度
+#### August 14, 2017
+- Sentry 支持
+- 多域名/CDN 支持
+- 功能修复及改进
 
-#### May 8, 2017
-- 主体功能完成
+See CHANGELOG.txt for more details.
 
 #### Next step
-- Keep collecting relationshop between prefixes of student ID and their major /继续收集学号前缀和专业对应关系信息
+- Keep collecting relationship between prefixes of student ID and their major /继续收集学号前缀和专业对应关系信息
 - Add some statistics function
 
 
