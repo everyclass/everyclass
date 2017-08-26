@@ -1,3 +1,0 @@
-*.sql linguist-language=SQL
-/server/static/*.css linguist-vendored=false
-/server/static/*.js linguist-vendored=false
