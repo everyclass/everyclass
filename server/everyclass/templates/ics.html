@@ -11,16 +11,16 @@
                 安卓系统请看下方解决方案<br><div id="wechat-notify" style="display: none; color: #c9a535;">如果你在使用微信等 App 内置浏览器，你需要选择用系统浏览器打开↗</div>
             </h4>
 
-            <p class="p1"><span class="s1"><b>把课表添加到日历有什么用？<br></b></span>把课表添加到日历能让你在同一处集中管理每日课表和其他日程，同时，借助 <a
+            <p class="p1"><span class="s1"><b>把课表添加到日历有什么用？<br></b></span>把课表添加到日历能让你在同一处集中管理每日课表和其他日程。同时，借助 <a
                     href="https://www.dida365.com/" target="_blank"
-                    onclick="_czc.push(['_trackEvent', '日历页', '滴答清单']);">滴答清单</a> 等强大好用的 App 的配合，你会发现自己可以把每天过的井井有条。<br>如果你的系统日历跟其他地方（如
-                Google Calendar）设置了云同步，那么每一处都可以有你的课表，从此再也不用超级课程表、课程格子等单独的课程表 App 了。
+                    onclick="_czc.push(['_trackEvent', '日历页', '滴答清单']);">滴答清单</a> 等强大好用的 App 的配合，你会发现自己可以把每天过的井井有条。<br>如果你的手机日历跟其他地方（如
+                Google Calendar）设置了云同步，你便可以在任意一台设备上查看自己完整的日程，从此再也不用超级课程表、课程格子等单独的课程表 App 了。
             </p>
             <p class="p1"><span class="s1"><b>该功能支持哪些设备？<br></b></span>iCalendar(WebCal)
-                是通用的日历交换格式，但安卓系统并没有对此的支持。若您使用安卓系统，请复制<a
+                是通用的日历交换格式，但安卓系统并没有对此的支持。若您使用安卓系统，请复制 <a
                         href="{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True, _scheme='https') }}"
-                        onclick="_czc.push(['_trackEvent', '日历导出页', '安卓链接']);">{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True, _scheme='https') }}</a>，然后使用滴答清单、Google Calendar 等支持导入日历的 App 导入。
-                <br>如果你希望课表在所有苹果设备上自动同步，需要通过 Mac 端的日历 App 来设置（iOS 只能订阅日历到当前设备）。
+                        onclick="_czc.push(['_trackEvent', '日历导出页', '安卓链接']);">{{ url_for('get_ics', student_id=student_id,semester=semester,_external=True, _scheme='https') }}</a>，然后使用滴答清单、Google Calendar 等支持导入日历的 App 导入。使用方法请看下方链接。
+                <br>如果你希望课表在所有<b>苹果设备</b>上自动同步，需要通过 Mac 端的日历 App 来设置（iPhone/iPad 只能订阅日历到当前设备）。
             </p>
             <p class="p1">
                 你或许需要：

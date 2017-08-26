@@ -4,10 +4,12 @@
 *To run this python programme, please use Python 3.6.0*
 
 ## Latest progress 最新进度
-#### August 14, 2017
+#### August 26, 2017
 - Sentry 支持
 - 多域名/CDN 支持
 - 功能修复及改进
+- 修复 ics 导出路径链接错误的 bug
+- HTML 压缩
 
 See CHANGELOG.txt for more details.
 
