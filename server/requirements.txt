@@ -8,6 +8,7 @@ Flask-CDN==1.5.3
 Flask-MySQL==1.4.0
 Flask-Script==2.0.5
 -e git+https://github.com/pallets/flask.git@39d55525ac8f674b40be5d1d3160b9fd33ce501a#egg=flaskr&subdirectory=examples/flaskr
+htmlmin==0.1.10
 icalendar==3.11.3
 itsdangerous==0.24
 Jinja2==2.9.6

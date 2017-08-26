@@ -10,7 +10,7 @@ class Config(object):
     SENTRY_CONFIG = {
         'dsn': 'https://XXX@sentry.io/project',
     }
-
+    HTML_MINIFY = True
     # Semester and database settings
     DATA_LAST_UPDATE_TIME = 'Apr. 29, 2017'  # 数据最后更新日期
     DEFAULT_SEMESTER = (2016, 2017, 2)

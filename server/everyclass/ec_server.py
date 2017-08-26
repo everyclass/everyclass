@@ -1,6 +1,7 @@
 from flask import Flask, g, redirect, url_for, render_template, send_from_directory, flash, escape
 from flask_cdn import CDN
 from raven.contrib.flask import Sentry
+from htmlmin.main import minify
 from everyclass.cal import cal_blueprint
 from everyclass.config import load_config
 from everyclass.query import query_blueprint
@@ -54,6 +55,16 @@ def create_app():
     def get_ics(student_id, semester):
         return send_from_directory("ics", student_id + "-" + semester + ".ics", as_attachment=True,
                                    mimetype='text/calendar')
+
+    # Minify html response to decrease site traffic using htmlmin
+    @app.after_request
+    def response_minify(response):
+        if app.config['HTML_MINIFY'] and response.content_type == u'text/html; charset=utf-8':
+            response.set_data(
+                minify(response.get_data(as_text=True))
+            )
+            return response
+        return response
 
     # 404跳转回首页
     @app.errorhandler(404)
