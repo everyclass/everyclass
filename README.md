@@ -24,9 +24,9 @@ EveryClass 是由就读于中南大学的 Frederic 创建的一个 Python 项目
 ## English
 
 ### Introduction
-EveryClass is a programme started by Frederic at CSU. It's written in Python. It has two basic functions:
-- Show you the list that people study in the same class with you, including their faculties and the classes they in.
-- Generate an `.ics` file which could be imported to your calendar on your mobile phone, Mac, etc.
+Started by Frederic at Central South University, EveryClass is a Python programme which has two basic functions:
+- Listing people taking same class with you, including their faculties and major info.
+- Generating an `.ics` file that could be imported to calender app so you can view your daily schedule in one place
 
 ### Project Structure
 We decided to separate its different module to standalone repositories for clearer structure:
