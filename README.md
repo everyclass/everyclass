@@ -1,5 +1,5 @@
-## EveryClass @ CSU - A tool to import your classes to calendar on your phone and know who're taking same classes with you
-每课 @ CSU - 一个能将你的课表导入手机、电脑的日历，并查询跟你上同一节课的人的工具
+## EveryClass @ CSU - Personal curriculum schedule subscription & powerful information query tool for your college life at CSU
+每课 @ CSU - 个人课表订阅 & 强大的信息查询工具，为你的 CSU 校园生活量身定做
 
 **For English version please scroll down.**
 
